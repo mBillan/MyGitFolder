@@ -1,1 +1,2 @@
 hello my friend, what up?
+Dealing with git is a little hard at first but I am getting the idea.
