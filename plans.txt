@@ -1,3 +1,9 @@
 The develop took from the master.
 Meanwhile the master branch have changed.
 Let us see what happens!!
+
+
+How to add you changes to the repo:
+	git commit -m "Initiating my first git folder"
+	git remote add origin https://github.com/mBillan/MyGitFolder.git
+	git push -u origin master
