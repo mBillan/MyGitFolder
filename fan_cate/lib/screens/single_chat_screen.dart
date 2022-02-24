@@ -113,32 +113,33 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
   @override
   Widget build(BuildContext context) {
     return FxBuilder<SingleChatController>(
-        controller: singleChatController,
-        builder: (singleChatController) {
-          return Scaffold(
-            body: Padding(
-              padding: FxSpacing.top(32),
-              child: Column(
-                children: [
-                  Container(
-                    height: 2,
-                    child: singleChatController.showLoading
-                        ? LinearProgressIndicator(
-                            color: customTheme.estatePrimary,
-                            minHeight: 2,
-                          )
-                        : Container(
-                            height: 2,
-                          ),
-                  ),
-                  Expanded(
-                    child: _buildBody(),
-                  ),
-                ],
-              ),
+      controller: singleChatController,
+      builder: (singleChatController) {
+        return Scaffold(
+          body: Padding(
+            padding: FxSpacing.top(32),
+            child: Column(
+              children: [
+                Container(
+                  height: 2,
+                  child: singleChatController.showLoading
+                      ? LinearProgressIndicator(
+                          color: customTheme.estatePrimary,
+                          minHeight: 2,
+                        )
+                      : Container(
+                          height: 2,
+                        ),
+                ),
+                Expanded(
+                  child: _buildBody(),
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildBody() {

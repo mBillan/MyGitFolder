@@ -1,4 +1,5 @@
 import 'package:fan_cate/data/user.dart';
+import 'package:fan_cate/screens/login_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -29,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Theme(
       data: theme.copyWith(
           colorScheme: theme.colorScheme
-              .copyWith(secondary: customTheme.cookifyPrimary.withAlpha(40))),
+              .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
       child: SafeArea(
         child: Scaffold(
           body: ListView(
@@ -60,12 +61,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           FxButton.outlined(
                               onPressed: () {},
                               splashColor:
-                                  customTheme.cookifyPrimary.withAlpha(40),
-                              borderColor: customTheme.cookifyPrimary,
+                                  customTheme.estatePrimary.withAlpha(40),
+                              borderColor: customTheme.estatePrimary,
                               padding: FxSpacing.xy(16, 4),
                               borderRadiusAll: 32,
                               child: FxText.b3("Edit profile",
-                                  color: customTheme.cookifyPrimary))
+                                  color: customTheme.estatePrimary))
                         ],
                       ),
                     ),
@@ -86,9 +87,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     dense: true,
                     contentPadding: FxSpacing.zero,
                     inactiveTrackColor:
-                        customTheme.cookifyPrimary.withAlpha(100),
-                    activeTrackColor: customTheme.cookifyPrimary.withAlpha(150),
-                    activeColor: customTheme.cookifyPrimary,
+                        customTheme.estatePrimary.withAlpha(100),
+                    activeTrackColor: customTheme.estatePrimary.withAlpha(150),
+                    activeColor: customTheme.estatePrimary,
                     title: FxText.b2(
                       "Notifications",
                       letterSpacing: 0,
@@ -118,9 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     dense: true,
                     contentPadding: FxSpacing.zero,
                     inactiveTrackColor:
-                        customTheme.cookifyPrimary.withAlpha(100),
-                    activeTrackColor: customTheme.cookifyPrimary.withAlpha(150),
-                    activeColor: customTheme.cookifyPrimary,
+                        customTheme.estatePrimary.withAlpha(100),
+                    activeTrackColor: customTheme.estatePrimary.withAlpha(150),
+                    activeColor: customTheme.estatePrimary,
                     title: FxText.b2(
                       "Offline Reading",
                       letterSpacing: 0,
@@ -189,7 +190,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         MaterialPageRoute(
-                            builder: (context) => SplashScreen()),
+                            // builder: (context) => SplashScreen()),
+                            builder: (context) => LoginScreen()),
                       );
                     },
                     child: FxText.l1(
@@ -197,13 +199,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: customTheme.cookifyOnPrimary,
                     ),
                     elevation: 2,
-                    backgroundColor: customTheme.cookifyPrimary,
+                    backgroundColor: customTheme.estatePrimary,
                   ))
                 ],
               )),
               FxSpacing.height(24),
               FxContainer(
-                  color: customTheme.cookifyPrimary.withAlpha(40),
+                  color: customTheme.estatePrimary.withAlpha(40),
                   padding: FxSpacing.xy(16, 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -211,12 +213,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       FxTwoToneIcon(
                         FxTwoToneMdiIcons.headset_mic,
                         size: 32,
-                        color: customTheme.cookifyPrimary,
+                        color: customTheme.estatePrimary,
                       ),
                       FxSpacing.width(12),
                       FxText.b3(
                         "Feel Free to Ask, We Ready to Help",
-                        color: customTheme.cookifyPrimary,
+                        color: customTheme.estatePrimary,
                         letterSpacing: 0,
                       )
                     ],
