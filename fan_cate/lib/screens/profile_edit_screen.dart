@@ -3,22 +3,26 @@ import 'package:fan_cate/src/toast.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
+
+import '../data/user.dart';
 import 'login_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
+class ProfileEditScreen extends StatefulWidget {
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _ProfileEditScreenState createState() => _ProfileEditScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
+  late User user;
 
   @override
   void initState() {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    user = User.getOne();
   }
 
   @override
@@ -32,19 +36,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: FxSpacing.fromLTRB(24, 100, 24, 0),
           children: [
             FxTwoToneIcon(
-              FxTwoToneMdiIcons.person,
+              FxTwoToneMdiIcons.update,
               color: customTheme.estatePrimary,
               size: 64,
             ),
             FxSpacing.height(16),
             FxText.h3(
-              "Create an Account",
+              "Update your info",
               color: customTheme.estatePrimary,
               fontWeight: 800,
               textAlign: TextAlign.center,
             ),
             FxSpacing.height(32),
             FxTextField(
+              labelText: user.name,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               autoFocusedBorder: true,
               textFieldStyle: FxTextFieldStyle.outlined,
@@ -59,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             FxSpacing.height(24),
             FxTextField(
+              labelText: user.email,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               autoFocusedBorder: true,
               textFieldStyle: FxTextFieldStyle.outlined,
@@ -86,44 +92,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
               cursorColor: customTheme.estatePrimary,
             ),
             FxSpacing.height(16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FxButton.text(
-                  padding: FxSpacing.zero,
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                          builder: (context) => ForgotPasswordScreen()),
-                    );
-                  },
-                  splashColor: customTheme.estatePrimary.withAlpha(40),
-                  child: FxText.b3("Forgot Password?",
-                      color: customTheme.estatePrimary)),
-            ),
-            FxSpacing.height(16),
             FxButton.block(
                 borderRadiusAll: 8,
                 onPressed: () {
-                  showToast(context, "Signed up successfully!");
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  showToast(context, "Updated successfully!");
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 backgroundColor: customTheme.estatePrimary,
                 child: FxText.l1(
-                  "Create an Account",
+                  "Update",
                   color: customTheme.cookifyOnPrimary,
                 )),
             FxSpacing.height(16),
             FxButton.text(
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(
-                        builder: (context) => LoginScreen()),
-                  );
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 splashColor: customTheme.estatePrimary.withAlpha(40),
-                child: FxText.l2("I already have an account",
+                child: FxText.l2("Cancel",
                     decoration: TextDecoration.underline,
                     color: customTheme.estatePrimary)),
             FxSpacing.height(16),

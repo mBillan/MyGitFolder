@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: customTheme.estatePrimary, fontWeight: 800),
             ),
             FxSpacing.height(32),
+            // Email
             FxTextField(
               floatingLabelBehavior: FloatingLabelBehavior.never,
               autoFocusedBorder: true,
@@ -61,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
               cursorColor: customTheme.estatePrimary,
             ),
             FxSpacing.height(24),
+            // Password
             FxTextField(
               floatingLabelBehavior: FloatingLabelBehavior.never,
               autoFocusedBorder: true,
@@ -75,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
               cursorColor: customTheme.estatePrimary,
             ),
             FxSpacing.height(16),
+            // Forgot password
             Align(
               alignment: Alignment.centerRight,
               child: FxButton.text(
@@ -90,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: customTheme.estatePrimary)),
             ),
             FxSpacing.height(16),
+            // Login button
             FxButton.block(
                 borderRadiusAll: 8,
                 onPressed: () {
@@ -104,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: customTheme.cookifyOnPrimary,
                 )),
             FxSpacing.height(16),
+            // Don't have an account
             FxButton.text(
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).push(

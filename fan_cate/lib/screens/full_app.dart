@@ -1,3 +1,4 @@
+import 'package:fan_cate/screens/add_post.dart';
 import 'package:fan_cate/screens/chat_screen.dart';
 import 'package:fan_cate/screens/home_screen.dart';
 import 'package:fan_cate/screens/profile_screen.dart';
@@ -56,7 +57,7 @@ class _FullAppState extends State<FullApp> {
                 size: 24,
               ),
               activeIcon: Icon(
-                Icons.chat_bubble,
+                Icons.chat,
                 color: customTheme.estatePrimary.withAlpha(240),
                 size: 24,
               ),
@@ -65,14 +66,14 @@ class _FullAppState extends State<FullApp> {
               activeTitleColor: customTheme.estatePrimary,
             ),
             FxBottomNavigationBarItem(
-              page: const Center(child: Text("Add Post Page")), // CookifyShowcaseScreen(),
+              page: AddPostScreen(),
               icon: FxTwoToneIcon(
-                FxTwoToneMdiIcons.post_add,
+                FxTwoToneMdiIcons.add_box,
                 color: customTheme.estatePrimary.withAlpha(240),
                 size: 24,
               ),
               activeIcon: Icon(
-                Icons.add_box_rounded,
+                Icons.add_box,
                 color: customTheme.estatePrimary,
                 size: 24,
               ),

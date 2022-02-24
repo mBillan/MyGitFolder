@@ -1,5 +1,6 @@
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/login_screen.dart';
+import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -59,7 +60,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           FxSpacing.height(8),
                           FxButton.outlined(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileEditScreen()),
+                                );
+                              },
                               splashColor:
                                   customTheme.estatePrimary.withAlpha(40),
                               borderColor: customTheme.estatePrimary,
@@ -75,134 +81,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               FxSpacing.height(24),
               FxContainer(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FxText.t2(
-                    "Option",
-                    fontWeight: 700,
-                  ),
-                  FxSpacing.height(8),
-                  SwitchListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    inactiveTrackColor:
-                        customTheme.estatePrimary.withAlpha(100),
-                    activeTrackColor: customTheme.estatePrimary.withAlpha(150),
-                    activeColor: customTheme.estatePrimary,
-                    title: FxText.b2(
-                      "Notifications",
-                      letterSpacing: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FxSpacing.height(8),
+                    FxText.t2(
+                      "Account",
+                      fontWeight: 700,
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        notification = value;
-                      });
-                    },
-                    value: notification,
-                  ),
-                  ListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    visualDensity: VisualDensity.compact,
-                    title: FxText.b2(
-                      "Language",
-                      letterSpacing: 0,
+                    FxSpacing.height(8),
+                    ListTile(
+                      dense: true,
+                      contentPadding: FxSpacing.zero,
+                      visualDensity: VisualDensity.compact,
+                      title: FxText.b2(
+                        "Liked",
+                        letterSpacing: 0,
+                      ),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                        color: theme.colorScheme.onBackground,
+                      ),
                     ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      size: 20,
-                      color: theme.colorScheme.onBackground,
+                    ListTile(
+                      dense: true,
+                      contentPadding: FxSpacing.zero,
+                      visualDensity: VisualDensity.compact,
+                      title: FxText.b2(
+                        "History",
+                        letterSpacing: 0,
+                      ),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                        color: theme.colorScheme.onBackground,
+                      ),
                     ),
-                  ),
-                  SwitchListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    inactiveTrackColor:
-                        customTheme.estatePrimary.withAlpha(100),
-                    activeTrackColor: customTheme.estatePrimary.withAlpha(150),
-                    activeColor: customTheme.estatePrimary,
-                    title: FxText.b2(
-                      "Offline Reading",
-                      letterSpacing: 0,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        offlineReading = value;
-                      });
-                    },
-                    value: offlineReading,
-                  ),
-                  Divider(
-                    thickness: 0.8,
-                  ),
-                  FxSpacing.height(8),
-                  FxText.t2(
-                    "Account",
-                    fontWeight: 700,
-                  ),
-                  FxSpacing.height(8),
-                  ListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    visualDensity: VisualDensity.compact,
-                    title: FxText.b2(
-                      "Personal Information",
-                      letterSpacing: 0,
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      size: 20,
-                      color: theme.colorScheme.onBackground,
-                    ),
-                  ),
-                  ListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    visualDensity: VisualDensity.compact,
-                    title: FxText.b2(
-                      "Country",
-                      letterSpacing: 0,
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      size: 20,
-                      color: theme.colorScheme.onBackground,
-                    ),
-                  ),
-                  ListTile(
-                    dense: true,
-                    contentPadding: FxSpacing.zero,
-                    visualDensity: VisualDensity.compact,
-                    title: FxText.b2(
-                      "Favorite Recipes",
-                      letterSpacing: 0,
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      size: 20,
-                      color: theme.colorScheme.onBackground,
-                    ),
-                  ),
-                  FxSpacing.height(16),
-                  Center(
+                    FxSpacing.height(16),
+                    Center(
                       child: FxButton.rounded(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                            // builder: (context) => SplashScreen()),
-                            builder: (context) => LoginScreen()),
-                      );
-                    },
-                    child: FxText.l1(
-                      "LOGOUT",
-                      color: customTheme.cookifyOnPrimary,
-                    ),
-                    elevation: 2,
-                    backgroundColor: customTheme.estatePrimary,
-                  ))
-                ],
-              )),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                // builder: (context) => SplashScreen()),
+                                builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: FxText.l1(
+                          "LOGOUT",
+                          color: customTheme.cookifyOnPrimary,
+                        ),
+                        elevation: 2,
+                        backgroundColor: customTheme.estatePrimary,
+                      ),
+                    )
+                  ],
+                ),
+              ),
               FxSpacing.height(24),
               FxContainer(
                   color: customTheme.estatePrimary.withAlpha(40),
@@ -217,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       FxSpacing.width(12),
                       FxText.b3(
-                        "Feel Free to Ask, We Ready to Help",
+                        "Feel Free to Ask, We're ready to Help",
                         color: customTheme.estatePrimary,
                         letterSpacing: 0,
                       )
