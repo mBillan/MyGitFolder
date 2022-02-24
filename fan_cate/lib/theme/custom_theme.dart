@@ -112,7 +112,7 @@ class CustomTheme {
     this.medicarePrimary = const Color(0xff6d65df),
     this.medicareOnPrimary = const Color(0xffffffff),
 
-    //Estate Color Scheme
+    // Color Scheme
     this.estatePrimary = const Color(0xff1c8c8c),
     this.estateOnPrimary = const Color(0xffffffff),
     this.estateSecondary = const Color(0xfff15f5f),

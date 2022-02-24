@@ -1,3 +1,4 @@
+import 'package:fan_cate/screens/chat_screen.dart';
 import 'package:fan_cate/screens/home_screen.dart';
 import 'package:fan_cate/screens/profile_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
@@ -48,7 +49,7 @@ class _FullAppState extends State<FullApp> {
               activeIconColor: customTheme.estatePrimary,
             ),
             FxBottomNavigationBarItem(
-              page: const Center(child:  Text("Chat Room"),), // CookifyShowcaseScreen(),
+              page: ChatScreen(), // CookifyShowcaseScreen(),
               icon: FxTwoToneIcon(
                 FxTwoToneMdiIcons.chat,
                 color: customTheme.estatePrimary.withAlpha(240),

@@ -1,4 +1,4 @@
-import 'package:fan_cate/screens/data/user.dart';
+import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
