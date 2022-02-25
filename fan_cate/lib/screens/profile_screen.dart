@@ -122,10 +122,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Center(
                       child: FxButton.rounded(
                         onPressed: () {
-                          Navigator.of(context, rootNavigator: true).push(
+                          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 // builder: (context) => SplashScreen()),
-                                builder: (context) => LoginScreen()),
+                                builder: (context) => LoginScreen(),
+                            ),
+                            ModalRoute.withName('/'),
                           );
                         },
                         child: FxText.l1(
