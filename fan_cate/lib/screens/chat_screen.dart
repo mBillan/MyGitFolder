@@ -156,7 +156,6 @@ class _ChatScreenState extends State<ChatScreen> {
           margin: FxSpacing.top(16),
           child: LoadingEffect.getSearchLoadingScreen(
             context,
-
           ));
     } else {
       return ListView(
@@ -174,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
           FxSpacing.height(16),
           FxTextField(
             textFieldStyle: FxTextFieldStyle.outlined,
-            labelText: 'Search your agent',
+            labelText: 'Search ...',
             focusedBorderColor: customTheme.estatePrimary,
             cursorColor: customTheme.estatePrimary,
             labelStyle: FxTextStyle.b3(
