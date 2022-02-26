@@ -16,7 +16,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 import 'package:fan_cate/flutx/themes/text_style.dart';
 import 'package:fan_cate/flutx/utils/spacing.dart';
 
-enum FxTextFieldType { email, password, name, address, mobileNumber, post }
+enum FxTextFieldType { email, password, name, address, mobileNumber, post, payment }
 enum FxTextFieldStyle {
   underlined,
   outlined,
@@ -554,6 +554,17 @@ class _FxTextFieldState extends State<FxTextField> {
                   : null);
           labelText = "Post";
           keyboardType = keyboardType ?? TextInputType.multiline;
+          break;
+        case FxTextFieldType.payment:
+          prefixIcon = prefixIcon ??
+              (autoIcon
+                  ? Icon(
+                Icons.payment,
+                color: prefixIconColor,
+              )
+                  : null);
+          labelText = "Donation";
+          keyboardType = keyboardType ?? TextInputType.number;
           break;
         default:
           labelText = "Label";

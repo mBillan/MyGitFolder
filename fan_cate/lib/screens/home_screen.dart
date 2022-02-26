@@ -1,6 +1,7 @@
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
+import 'package:fan_cate/screens/donation_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late User user;
+
   // late List<Post> posts;
   late CustomTheme customTheme;
   late ThemeData theme;
@@ -34,187 +36,66 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      FxBuilder<PostController>(controller: postController,
-        builder: (estateHomeController) =>
-      Theme(
-      data: theme.copyWith(
-          colorScheme: theme.colorScheme
-              .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
-      child:
-      SafeArea(
-        child: Scaffold(
-          body: Container(
-            padding: FxSpacing.top(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: FxSpacing.x(16),
-                  child: FxText.h3("${user.name},",
-                      color: customTheme.estatePrimary, fontWeight: 800),
-                ),
-                Container(
-                  margin: FxSpacing.x(16),
-                  child: FxText.b2("Latest Update!",
-                      color: theme.colorScheme.onBackground,
-                      letterSpacing: 0,
-                      xMuted: true,
-                      fontWeight: 700),
-                ),
-                // _buildBody(),
-                Expanded(
-                  child: _buildBody(),
-                ),
-                /*xSpacing.height(16),
-                FxContainer(
+    return FxBuilder<PostController>(
+      controller: postController,
+      builder: (estateHomeController) => Theme(
+        data: theme.copyWith(
+            colorScheme: theme.colorScheme
+                .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
+        child: SafeArea(
+          child: Scaffold(
+            body: Container(
+              padding: FxSpacing.top(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
                     margin: FxSpacing.x(16),
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                              builder: (context) => RecipeScreen()));
-                    },
-                    splashColor: customTheme.estatePrimary.withAlpha(40),
-                    color: customTheme.estatePrimary.withAlpha(30),
-                    child: Row(
-                      children: [
-                        FxTwoToneIcon(
-                          FxTwoToneMdiIcons.outdoor_grill,
-                          color: customTheme.estatePrimary,
-                          size: 48,
-                        ),
-                        FxSpacing.width(16),
-                        Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FxText.b3(
-                                    "You have 12 recipes that\nyou haven\'t tried yet",
-                                    fontWeight: 700),
-                                FxButton.text(
-                                    padding: FxSpacing.zero,
-                                    onPressed: () {},
-                                    splashColor:
-                                    customTheme.estatePrimary.withAlpha(40),
-                                    child: FxText.l2("See Recipes",
-                                        color: customTheme.estatePrimary,
-                                        decoration: TextDecoration.underline))
-                              ],
-                            ))
-                      ],
-                    )),
-                FxSpacing.height(16),
-                Container(
-                  margin: FxSpacing.x(16),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                              builder: (context) => RecipeScreen()));
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      child: Stack(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image(
-                            image: AssetImage(recipe.image),
+                          FxText.h3("${user.name},",
+                              color: customTheme.estatePrimary,
+                              fontWeight: 800),
+                          FxSpacing.height(16),
+                          FxText.b2("Latest Update!",
+                              color: theme.colorScheme.onBackground,
+                              letterSpacing: 0,
+                              xMuted: true,
+                              fontWeight: 700),
+                          FxSpacing.height(10),
+                          FxTextField(
+                            contentPadding: FxSpacing.horizontal(
+                              24,
+                            ),
+                            textFieldStyle: FxTextFieldStyle.outlined,
+                            labelText: 'Search ...',
+                            focusedBorderColor: customTheme.estatePrimary,
+                            cursorColor: customTheme.estatePrimary,
+                            labelStyle: FxTextStyle.b3(
+                                color: theme.colorScheme.onBackground,
+                                xMuted: true),
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            filled: true,
+                            fillColor: customTheme.estatePrimary.withAlpha(40),
+                            suffixIcon: Icon(
+                              FeatherIcons.search,
+                              color: customTheme.estatePrimary,
+                              size: 20,
+                            ),
                           ),
-                          Positioned(
-                              left: 16,
-                              top: 16,
-                              child: FxContainer(
-                                paddingAll: 8,
-                                color:
-                                customTheme.estatePrimary.withAlpha(200),
-                                child: FxText.b3(recipe.tag,
-                                    color: customTheme.cookifyOnPrimary,
-                                    fontWeight: 600),
-                              )),
-                          Positioned(
-                              right: 16,
-                              top: 16,
-                              child: Icon(
-                                recipe.favorite
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_outline,
-                                color: customTheme.estatePrimary,
-                                size: 28,
-                              )),
-                          Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                padding: FxSpacing.fromLTRB(16, 48, 16, 32),
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          customTheme.estatePrimary
-                                              .withAlpha(220),
-                                          customTheme.estatePrimary
-                                              .withAlpha(180),
-                                          customTheme.estatePrimary
-                                              .withAlpha(140),
-                                          customTheme.estatePrimary
-                                              .withAlpha(100),
-                                          Colors.transparent
-                                        ],
-                                        stops: [
-                                          0.1,
-                                          0.25,
-                                          0.5,
-                                          0.7,
-                                          1
-                                        ])),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    FxText.h3(recipe.title,
-                                        color: Colors.white, fontWeight: 800),
-                                    FxSpacing.height(16),
-                                    FxText.b3(
-                                        recipe.preparationTime.toString() +
-                                            " Recipes | " +
-                                            recipe.serving.toString() +
-                                            " Serving",
-                                        color: Colors.white,
-                                        fontWeight: 600),
-                                  ],
-                                ),
-                              ))
-                        ],
-                      ),
-                    ),
+                        ]),
                   ),
-                ),
-                FxSpacing.height(16),
-                Container(
-                    margin: FxSpacing.x(16),
-                    child: FxText.t2(
-                      "Trending Recipe",
-                      fontWeight: 800,
-                    )),
-                FxSpacing.height(16),
-                SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: recipeList(),
+                  Expanded(
+                    child: _buildBody(),
                   ),
-                ),
-                FxSpacing.height(16),
-
-                 */
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),);
+    );
   }
 
   Widget _buildBody() {
@@ -223,44 +104,24 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: FxSpacing.top(16),
         child: LoadingEffect.getFavouriteLoadingScreen(
           context,
-          // itemCount: 8,
         ),
       );
     } else {
       return SingleChildScrollView(
-
         padding: FxSpacing.horizontal(
           24,
         ),
         child: Column(
-          children:
-        [
-          FxSpacing.height(16),
-          FxTextField(
-            textFieldStyle: FxTextFieldStyle.outlined,
-            labelText: 'Search ...',
-            focusedBorderColor: customTheme.estatePrimary,
-            cursorColor: customTheme.estatePrimary,
-            labelStyle: FxTextStyle.b3(
-                color: theme.colorScheme.onBackground, xMuted: true),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            filled: true,
-            fillColor: customTheme.estatePrimary.withAlpha(40),
-            suffixIcon: Icon(
-              FeatherIcons.search,
-              color: customTheme.estatePrimary,
-              size: 20,
+          children: [
+            FxSpacing.height(20),
+            Column(
+              children: buildPosts(),
             ),
-          ),
-          FxSpacing.height(20),
-          Column(
-            children: buildPosts(),
-          ),
-        ],
-      ),);
+          ],
+        ),
+      );
     }
   }
-
 
   List<Widget> buildPosts() {
     List<Widget> list = [];
@@ -313,7 +174,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               FxSpacing.width(4),
               FxText.b3(post.time + "'", muted: true),
-              FxSpacing.width(24),
+              FxSpacing.width(20),
+
+              FxButton.outlined(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                          builder: (context) => DonationScreen()),
+                    );
+                  },
+                  splashColor:
+                  customTheme.estatePrimary.withAlpha(40),
+                  // borderColor: customTheme.estatePrimary,
+                  padding: FxSpacing.xy(16, 4),
+                  borderRadiusAll: 32,
+                  child: FxText.b3("Donate",
+                      color: customTheme.estatePrimary)),
+
             ],
           ),
         ],
