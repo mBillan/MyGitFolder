@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
@@ -120,9 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else {
       return SingleChildScrollView(
-        padding: FxSpacing.horizontal(
-          24,
-        ),
         child: Column(
           children: [
             FxSpacing.height(20),
@@ -139,18 +139,19 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Widget> postsList = [];
 
     for (Post post in postController.posts!) {
-      postsList.add(postWidget(post: post));
+      postsList.add(singlePost(post: post));
     }
 
     return postsList;
   }
 
-  Widget postWidget(
-      {required Post post}) {
+  Widget singlePost({required Post post}) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SocialPostScreen(post: post)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SocialPostScreen(post: post)));
       },
       child: Container(
         margin: FxSpacing.fromLTRB(0, 12, 0, 16),
@@ -262,56 +263,60 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Container(
-              margin: FxSpacing.fromLTRB(16, 0, 16, 0),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      FxText.b2("Nola Padilla",
-                          color: theme.colorScheme.onBackground,
-                          fontWeight: 700),
-                      Expanded(
-                        child: Container(
-                          margin: FxSpacing.left(8),
-                          child: FxText.caption(
-                            Generator.getDummyText(5, withEmoji: true),
-                            color: theme.colorScheme.onBackground,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    margin: FxSpacing.top(4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        FxText.b2("Kristie Smith",
-                            color: theme.colorScheme.onBackground,
-                            fontWeight: 700),
-                        Expanded(
-                          child: Container(
-                            margin: FxSpacing.left(8),
-                            child: FxText.caption(
-                              Generator.getDummyText(5, withEmoji: true),
-                              color: theme.colorScheme.onBackground,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
+            buildComments(comments: post.comments),
           ],
         ),
       ),
     );
   }
 
+  Widget buildComments({required List<String>? comments}) {
+    List<Widget> commentsWidgets = [];
+
+    // Take only the first 3 comments
+    for (String comment in comments!.getRange(0, min(3, comments.length))) {
+      commentsWidgets.add(singleComment(comment: comment));
+    }
+
+    return Container(
+      alignment: AlignmentDirectional.topStart,
+      margin: FxSpacing.fromLTRB(16, 0, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: commentsWidgets +
+            [
+              FxSpacing.height(10),
+              FxText.caption(
+                "Press for more comments",
+                color: theme.colorScheme.onBackground,
+                xMuted: true,
+              )
+            ],
+      ),
+    );
+  }
+
+  Widget singleComment({required String comment, String username = "Mar B"}) {
+    return Container(
+      margin: FxSpacing.top(4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FxText.b2(username,
+              color: theme.colorScheme.onBackground, fontWeight: 700),
+          Expanded(
+            child: Container(
+              margin: FxSpacing.left(8),
+              child: FxText.caption(
+                // Generator.getDummyText(5, withEmoji: true),
+                comment,
+                color: theme.colorScheme.onBackground,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

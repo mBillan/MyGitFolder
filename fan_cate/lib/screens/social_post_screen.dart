@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/utils/generator.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +19,14 @@ class SocialPostScreen extends StatefulWidget {
 class _SocialPostScreenState extends State<SocialPostScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
+  late bool viewAllComments;
 
   @override
   void initState() {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    viewAllComments = false;
   }
 
   @override
@@ -75,8 +79,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
         Container(
           margin: FxSpacing.top(12),
           child: Image(
-            image: AssetImage(
-                widget.post.postImage            ),
+            image: AssetImage(widget.post.postImage),
             height: MediaQuery.of(context).size.height * 0.45,
             fit: BoxFit.cover,
           ),
@@ -116,23 +119,32 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
             ],
           ),
         ),
+        // Only show the first 5 comments and hide the others if viewAllComments is false
         Container(
           margin: FxSpacing.fromLTRB(24, 12, 24, 0),
           child: FxText.caption(
-              Generator.getParagraphsText(
-                  withEmoji: true,
-                  paragraph: 2,
-                  words: 18,
-                  noOfNewLine: 1,
-                  withHyphen: true),
+              (widget.post.comments == null)
+                  ? ""
+                  : (viewAllComments) ?  "- ${widget.post.comments!.getRange(0, widget.post.comments!.length).join('\n- ')}"
+                  :"- ${widget.post.comments!.getRange(0, min(4, widget.post.comments!.length)).join('\n- ')}",
               color: theme.colorScheme.onBackground),
         ),
         Container(
           margin: FxSpacing.fromLTRB(24, 8, 24, 0),
-          child: FxText.caption("View all 28 comments",
-              color: theme.colorScheme.onBackground,
-              xMuted: true,
-              letterSpacing: -0.2),
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                viewAllComments = !viewAllComments;
+              });
+            },
+            child: FxText.caption(
+                (viewAllComments)
+                    ? "Collapse comments"
+                    : "View all ${widget.post.comments?.length} comments",
+                color: theme.colorScheme.onBackground,
+                xMuted: true,
+                letterSpacing: -0.2),
+          ),
         ),
         Container(
           margin: FxSpacing.fromLTRB(24, 16, 24, 0),

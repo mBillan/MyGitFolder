@@ -21,7 +21,14 @@ class Post {
       status: 'Hello, how can i help you man?',
       time: '14:22 am',
       postImage: 'assets/images/apps/social/post-1.jpg',
-      comments: ["That's a good one", "you rock!!"],
+      comments: [
+        "That's a good one",
+        "you rock!!",
+        "This talk no walk",
+        "I have hour order the coffee!",
+        "Pain",
+        "You've got to do what you've got to do"
+      ],
       likes: 54,
     ));
     list.add(
@@ -31,7 +38,11 @@ class Post {
           status: "Sponsored",
           postImage: './assets/images/apps/social/post-1.jpg',
           likes: 700,
-          time: 'Yesterday'),
+          time: 'Yesterday',
+          comments: [
+            "I am already in love with this",
+            "your new look is awesome!"
+          ]),
     );
     list.add(
       Post(
