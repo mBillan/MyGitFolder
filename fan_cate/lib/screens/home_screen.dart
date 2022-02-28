@@ -2,12 +2,15 @@ import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
 import 'package:fan_cate/screens/donation_screen.dart';
+import 'package:fan_cate/screens/social_post_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../data/post.dart';
+import '../utils/generator.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -33,6 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     postController = FxControllerStore.putOrFind(PostController());
   }
+
+  final List<String> _simpleChoice = [
+    "Report",
+    "Turn on notification",
+    "Copy Link",
+    "Share to ...",
+    "Unfollow",
+    "Mute"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -124,161 +136,182 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> buildPosts() {
-    List<Widget> list = [];
+    List<Widget> postsList = [];
 
     for (Post post in postController.posts!) {
-      list.add(singlePost(post));
+      postsList.add(postWidget(post: post));
     }
 
-    return list;
+    return postsList;
   }
 
-  Widget singlePost(Post post) {
-    return FxContainer(
-      onTap: () {
-        // Navigator.of(context, rootNavigator: true).push(
-        //     MaterialPageRoute(builder: (context) => CookifyRecipeScreen()));
-      },
-      color: Colors.transparent,
-      padding: FxSpacing.bottom(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              child: Image(
-                image: AssetImage(post.image),
-              ),
-            ),
-          ),
-          FxSpacing.height(8),
-          FxText.b1(post.text, fontWeight: 700, letterSpacing: 0),
-          // FxText.b3(post.body,
-          //     muted: true, fontWeight: 500, letterSpacing: -0.1),
-          FxSpacing.height(16),
-          Row(
-            children: [
-              Icon(
-                Icons.favorite_border,
-                size: 16,
-                color: theme.colorScheme.onBackground.withAlpha(200),
-              ),
-              FxSpacing.width(4),
-              FxText.b3(post.likes.toString(), muted: true),
-              FxSpacing.width(16),
-              Icon(
-                Icons.schedule,
-                size: 16,
-                color: theme.colorScheme.onBackground.withAlpha(200),
-              ),
-              FxSpacing.width(4),
-              FxText.b3(post.time + "'", muted: true),
-              FxSpacing.width(20),
-
-              FxButton.outlined(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                          builder: (context) => DonationScreen()),
-                    );
-                  },
-                  splashColor:
-                  customTheme.estatePrimary.withAlpha(40),
-                  // borderColor: customTheme.estatePrimary,
-                  padding: FxSpacing.xy(16, 4),
-                  borderRadiusAll: 32,
-                  child: FxText.b3("Donate",
-                      color: customTheme.estatePrimary)),
-
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-/*
-  List<Widget> recipeList() {
-    List<Widget> list = [];
-    list.add(FxSpacing.width(16));
-
-    for (int i = 0; i < trendingRecipe.length; i++) {
-      list.add(singleRecipe(trendingRecipe[i]));
-      list.add(FxSpacing.width(16));
-    }
-
-    return list;
-  }
-
-  Widget singleRecipe(Recipe recipe) {
+  Widget postWidget(
+      {required Post post}) {
     return InkWell(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(builder: (context) => RecipeScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SocialPostScreen(post: post)));
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        child: Stack(
+      child: Container(
+        margin: FxSpacing.fromLTRB(0, 12, 0, 16),
+        child: Column(
           children: [
-            Image(
-              image: AssetImage(recipe.image),
-              width: 240,
+            Container(
+              margin: FxSpacing.fromLTRB(16, 0, 16, 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => SocialProfileScreen(post)));
+                    },
+                    child: Container(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Image(
+                            image: AssetImage(post.profileImage),
+                            width: 32,
+                            height: 32,
+                          )),
+                    ),
+                  ),
+                  Container(
+                    margin: FxSpacing.left(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FxText.caption(post.name,
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 600),
+                        FxText.caption(post.status,
+                            fontSize: 12,
+                            color: theme.colorScheme.onBackground,
+                            muted: true,
+                            fontWeight: 500),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        alignment: Alignment.bottomRight,
+                        child: FxText.caption(
+                          post.time,
+                          color: theme.colorScheme.onBackground,
+                        )),
+                  )
+                ],
+              ),
             ),
-            Positioned(
-                left: 16,
-                top: 16,
-                child: FxContainer(
-                  paddingAll: 8,
-                  color: Colors.black.withAlpha(200),
-                  child: FxText.b3(recipe.tag,
-                      color: customTheme.cookifyOnPrimary, fontWeight: 600),
-                )),
-            Positioned(
-                bottom: 16,
-                left: 12,
-                right: 12,
-                child: FxContainer(
-                  padding: FxSpacing.xy(12, 16),
-                  color:
-                  Color.lerp(customTheme.estatePrimary, Colors.black, 0.9)!
-                      .withAlpha(160),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: FxText.t2(recipe.title,
-                                color: Colors.white, fontWeight: 800),
-                          ),
-                          Icon(
-                            recipe.favorite
-                                ? Icons.bookmark
-                                : Icons.bookmark_outline,
-                            color: customTheme.estatePrimary,
-                            size: 18,
-                          )
-                        ],
+            Container(
+              margin: FxSpacing.top(12),
+              child: Image(
+                image: AssetImage(
+                  post.postImage,
+                ),
+                height: 240,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              margin: FxSpacing.fromLTRB(16, 0, 16, 0),
+              child: Row(
+                children: [
+                  Generator.buildOverlaysProfile(
+                      images: [
+                        './assets/images/profile/avatar_3.jpg',
+                        './assets/images/profile/avatar_5.jpg',
+                        './assets/images/profile/avatar_2.jpg',
+                      ],
+                      enabledOverlayBorder: true,
+                      overlayBorderColor: customTheme.card,
+                      overlayBorderThickness: 1.7,
+                      leftFraction: 0.72,
+                      size: 24),
+                  Container(
+                    margin: FxSpacing.left(4),
+                    child: FxText.caption(post.likes.toString(),
+                        letterSpacing: 0,
+                        color: theme.colorScheme.onBackground),
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      child: PopupMenuButton(
+                        itemBuilder: (BuildContext context) {
+                          return _simpleChoice.map((String choice) {
+                            return PopupMenuItem(
+                              value: choice,
+                              height: 36,
+                              child: FxText.b2(choice,
+                                  color: theme.colorScheme.onBackground),
+                            );
+                          }).toList();
+                        },
+                        icon: Icon(
+                          MdiIcons.dotsVertical,
+                          color: theme.colorScheme.onBackground,
+                          size: 20,
+                        ),
                       ),
-                      FxSpacing.height(16),
-                      FxText.b3(
-                          recipe.preparationTime.toString() +
-                              " Recipes | " +
-                              recipe.serving.toString() +
-                              " Serving",
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: 600),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: FxSpacing.fromLTRB(16, 0, 16, 0),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      FxText.b2("Nola Padilla",
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 700),
+                      Expanded(
+                        child: Container(
+                          margin: FxSpacing.left(8),
+                          child: FxText.caption(
+                            Generator.getDummyText(5, withEmoji: true),
+                            color: theme.colorScheme.onBackground,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      )
                     ],
                   ),
-                ))
+                  Container(
+                    margin: FxSpacing.top(4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        FxText.b2("Kristie Smith",
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 700),
+                        Expanded(
+                          child: Container(
+                            margin: FxSpacing.left(8),
+                            child: FxText.caption(
+                              Generator.getDummyText(5, withEmoji: true),
+                              color: theme.colorScheme.onBackground,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
-  */
 
 }

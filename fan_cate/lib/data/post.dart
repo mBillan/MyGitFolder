@@ -1,35 +1,47 @@
 class Post {
-  final String image, name, text, time, messages;
-  final bool replied;
-  final int likes, timeInMinutes;
+  final String profileImage, name, status, time, postImage;
+  final List<String>? comments;
+  final int likes;
 
-  Post(this.image, this.name, this.text, this.time, this.messages, this.replied,
-      {this.likes = 0, this.timeInMinutes = 10});
+  Post(
+      {required this.profileImage,
+      required this.name,
+      required this.status,
+      required this.time,
+      required this.postImage,
+      this.likes = 0,
+      this.comments = const []});
 
   static List<Post> postsList() {
     List<Post> list = [];
 
+    list.add(Post(
+      profileImage: 'assets/images/profile/avatar_2.jpg',
+      name: 'Dr. John Rodriguez',
+      status: 'Hello, how can i help you man?',
+      time: '14:22 am',
+      postImage: 'assets/images/apps/social/post-1.jpg',
+      comments: ["That's a good one", "you rock!!"],
+      likes: 54,
+    ));
     list.add(
-      Post('assets/images/profile/avatar_2.jpg', 'Dr. John Rodriguez',
-          'Hello, how can i help you man?', '14:22 am', '2', false, likes: 54),
+      Post(
+          profileImage: './assets/brand/google.png',
+          name: "Google",
+          status: "Sponsored",
+          postImage: './assets/images/apps/social/post-1.jpg',
+          likes: 700,
+          time: 'Yesterday'),
     );
     list.add(
-      Post('assets/images/profile/avatar_1.jpg', 'Dr. Elizabeth Scott',
-          'Thank you for visiting.', '05:25 pm', '2', true, likes: 3),
+      Post(
+          profileImage: './assets/images/profile/avatar_3.jpg',
+          name: "Gordon Hays",
+          status: "Ahmedabad, Gujarat",
+          postImage: './assets/images/apps/social/post-l1.jpg',
+          likes: 98,
+          time: 'Yesterday'),
     );
-    list.add(
-      Post('assets/images/profile/avatar_3.jpg', 'Dr. Miguel Johnson',
-          'What are your requirements?', '12:32 am', '1', false, likes: 12),
-    );
-    list.add(
-      Post('assets/images/profile/avatar_4.jpg', 'Dr. Sarah Palson',
-          'I want a 2 floored house.', '07:56 am', '2', true, likes: 7),
-    );
-    list.add(
-      Post('assets/images/profile/avatar_5.jpg', 'Dr. Anna Handy',
-          'Hello, when will you be available?', '16:45 am', '2', true, likes: 23),
-    );
-
     return list;
   }
 
