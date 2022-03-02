@@ -66,9 +66,7 @@ class _ForgotPasswordScreenState
                 borderRadiusAll: 8,
                 onPressed: () {
                   showToast(context, "Check your email to reset your password");
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 backgroundColor: customTheme.estatePrimary,
                 child: FxText.l1(

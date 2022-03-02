@@ -105,9 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadiusAll: 8,
                 onPressed: () {
                   showToast(context, "Signed up successfully!");
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 backgroundColor: customTheme.estatePrimary,
                 child: FxText.l1(
