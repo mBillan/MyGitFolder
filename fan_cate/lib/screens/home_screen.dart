@@ -79,26 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               xMuted: true,
                               fontWeight: 700),
                           FxSpacing.height(10),
-                          FxTextField(
-                            contentPadding: FxSpacing.horizontal(
-                              24,
-                            ),
-                            textFieldStyle: FxTextFieldStyle.outlined,
-                            labelText: 'Search ...',
-                            focusedBorderColor: customTheme.estatePrimary,
-                            cursorColor: customTheme.estatePrimary,
-                            labelStyle: FxTextStyle.b3(
-                                color: theme.colorScheme.onBackground,
-                                xMuted: true),
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            filled: true,
-                            fillColor: customTheme.estatePrimary.withAlpha(40),
-                            suffixIcon: Icon(
-                              FeatherIcons.search,
-                              color: customTheme.estatePrimary,
-                              size: 20,
+                          Container(
+                            margin: FxSpacing.top(8),
+                            child: const Divider(
+                              height: 0,
                             ),
                           ),
+
                         ]),
                   ),
                   Expanded(
