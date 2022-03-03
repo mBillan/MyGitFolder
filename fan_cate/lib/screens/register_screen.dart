@@ -1,12 +1,10 @@
 import 'package:fan_cate/screens/forgot_password_screen.dart';
-import 'package:fan_cate/src/toast.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/register_controller.dart';
 import '../theme/constant.dart';
 import '../widgets/text_form_field/text_form_field.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override

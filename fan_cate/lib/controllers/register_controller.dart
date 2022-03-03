@@ -1,3 +1,4 @@
+import 'package:fan_cate/data/user.dart' as data;
 import 'package:fan_cate/screens/forgot_password_screen.dart';
 import 'package:fan_cate/screens/home_screen.dart';
 import 'package:fan_cate/screens/register_screen.dart';
@@ -11,7 +12,8 @@ class RegisterController extends FxController {
   late TextEditingController emailTE = TextEditingController();
   late TextEditingController passwordTE = TextEditingController();
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // Using a prefix for the User class since firebase_auth also uas the same class name
+  data.User user = data.User.getOne();
 
   GlobalKey<FormState> formKey = GlobalKey();
 
@@ -75,7 +77,7 @@ class RegisterController extends FxController {
       String password = passwordTE.text;
 
       try {
-        UserCredential result = await auth.createUserWithEmailAndPassword(
+        UserCredential result = await user.auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
         if (result.user != null) {

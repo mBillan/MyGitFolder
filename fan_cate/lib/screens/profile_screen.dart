@@ -4,7 +4,6 @@ import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
-import 'splash_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -122,12 +121,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Center(
                       child: FxButton.rounded(
                         onPressed: () {
+                          user.auth.signOut();
                           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                // builder: (context) => SplashScreen()),
                                 builder: (context) => LoginScreen(),
                             ),
-                            ModalRoute.withName('/'),
+                            ModalRoute.withName(''),
                           );
                         },
                         child: FxText.l1(

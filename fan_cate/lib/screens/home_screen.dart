@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late User user;
 
+
   // late List<Post> posts;
   late CustomTheme customTheme;
   late ThemeData theme;

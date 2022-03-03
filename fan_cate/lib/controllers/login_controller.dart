@@ -1,5 +1,6 @@
+import 'package:fan_cate/data/user.dart' as data;
 import 'package:fan_cate/screens/forgot_password_screen.dart';
-import 'package:fan_cate/screens/home_screen.dart';
+import 'package:fan_cate/screens/full_app.dart';
 import 'package:fan_cate/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ class LoginController extends FxController {
   late TextEditingController emailTE = TextEditingController();
   late TextEditingController passwordTE = TextEditingController();
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // Using a prefix for the User class since firebase_auth also uas the same class name
+  data.User user = data.User.getOne();
 
   GlobalKey<FormState> formKey = GlobalKey();
 
@@ -57,7 +59,7 @@ class LoginController extends FxController {
       String password = passwordTE.text;
 
       try {
-        UserCredential result = await auth.signInWithEmailAndPassword(
+        UserCredential result = await user.auth.signInWithEmailAndPassword(
             email: email, password: password);
 
         if (result.user != null) {
@@ -94,7 +96,7 @@ class LoginController extends FxController {
   void goToHomeScreen() {
     Navigator.of(context, rootNavigator: true).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => FullApp(),
       ),
     );
   }
