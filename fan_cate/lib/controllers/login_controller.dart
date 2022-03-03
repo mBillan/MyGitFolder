@@ -68,9 +68,6 @@ class LoginController extends FxController {
         }
       } on FirebaseAuthException catch (error) {
         switch (error.code){
-          case Auth.emailAlreadyInUse:
-            showSnackBar("Email address is already in use");
-            break;
           case Auth.invalidEmail:
             showSnackBar("Invalid email address");
             break;

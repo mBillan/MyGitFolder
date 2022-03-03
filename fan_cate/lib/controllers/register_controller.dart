@@ -20,9 +20,9 @@ class RegisterController extends FxController {
 
   RegisterController() {
     save = false;
-    usernameTE = TextEditingController(text: 'Marwan Technologies');
-    emailTE = TextEditingController(text: 'marwan.billan@outlook.com');
-    passwordTE = TextEditingController(text: '123123123');
+    usernameTE = TextEditingController(text: '');
+    emailTE = TextEditingController(text: '');
+    passwordTE = TextEditingController(text: '');
   }
 
   @override
@@ -75,8 +75,15 @@ class RegisterController extends FxController {
       String password = passwordTE.text;
 
       try {
-        showSnackBar("Signing up ...");
-        Navigator.of(context).pop();
+        UserCredential result = await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+
+        if (result.user != null) {
+          showSnackBar("Registration is done!");
+          Navigator.of(context).pop();
+        } else {
+          showSnackBar("Something wrong with the registration");
+        }
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case Auth.emailAlreadyInUse:
@@ -84,9 +91,6 @@ class RegisterController extends FxController {
             break;
           case Auth.invalidEmail:
             showSnackBar("Invalid email address");
-            break;
-          case Auth.userNotFound:
-            showSnackBar("User is not registered");
             break;
           case Auth.weakPassword:
             showSnackBar("Password is weak");
