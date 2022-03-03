@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/src/auth.dart';
 
-class LoginController extends FxController {
+class RegisterController extends FxController {
+  late TextEditingController usernameTE = TextEditingController();
   late TextEditingController emailTE = TextEditingController();
   late TextEditingController passwordTE = TextEditingController();
 
@@ -17,15 +18,31 @@ class LoginController extends FxController {
   bool loading = false;
   bool showPassword = false;
 
-  LoginController() {
+  RegisterController() {
     save = false;
+    usernameTE = TextEditingController(text: 'Marwan Technologies');
     emailTE = TextEditingController(text: 'marwan.billan@outlook.com');
     passwordTE = TextEditingController(text: '123123123');
   }
 
   @override
   String getTag() {
-    return "login_controller";
+    return "register_controller";
+  }
+
+  String? validateUsername(String? username) {
+    const int minLength = 4, maxLength = 20;
+    if (username == null || username.isEmpty) {
+      return "Please enter email";
+    }
+    if (FxStringValidator.isSpecialCharacterIncluded(username)) {
+      return "Please don't use special characters";
+    }
+    if (!FxStringValidator.validateStringRange(
+        username, minLength, maxLength)) {
+      return "Username length must between $minLength and $maxLength";
+    }
+    return null;
   }
 
   String? validateEmail(String? text) {
@@ -48,26 +65,20 @@ class LoginController extends FxController {
     return null;
   }
 
-  Future<void> login() async {
+  Future<void> register() async {
     loading = true;
     update();
 
     if (formKey.currentState!.validate()) {
+      String username = usernameTE.text;
       String email = emailTE.text;
       String password = passwordTE.text;
 
       try {
-        UserCredential result = await auth.signInWithEmailAndPassword(
-            email: email, password: password);
-
-        if (result.user != null) {
-          showSnackBar("Login is done!");
-          goToHomeScreen();
-        } else {
-          showSnackBar("Something wrong with the login");
-        }
+        showSnackBar("Signing up ...");
+        Navigator.of(context).pop();
       } on FirebaseAuthException catch (error) {
-        switch (error.code){
+        switch (error.code) {
           case Auth.emailAlreadyInUse:
             showSnackBar("Email address is already in use");
             break;
@@ -109,14 +120,6 @@ class LoginController extends FxController {
       ),
     );
   }
-
-  // void goToGoogleAuth() {
-  //   Navigator.of(context, rootNavigator: true).pushReplacement(
-  //     MaterialPageRoute(
-  //       builder: (context) => GoogleAuthScreen(),
-  //     ),
-  //   );
-  // }
 
   void goToForgotPassword() {
     Navigator.of(context, rootNavigator: true).pushReplacement(

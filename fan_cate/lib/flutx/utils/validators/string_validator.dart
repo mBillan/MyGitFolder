@@ -49,8 +49,8 @@ class FxStringValidator {
     return false;
   }
 
-  static bool isIncludedCharactersPresent(String string,
-      List<String>? includeCharacters) {
+  static bool isIncludedCharactersPresent(
+      String string, List<String>? includeCharacters) {
     if (includeCharacters == null) {
       return false;
     }
@@ -63,8 +63,8 @@ class FxStringValidator {
     return false;
   }
 
-  static bool isIgnoreCharactersPresent(String string,
-      List<String>? ignoreCharacters) {
+  static bool isIgnoreCharactersPresent(
+      String string, List<String>? ignoreCharacters) {
     if (ignoreCharacters == null) {
       return false;
     }
@@ -132,7 +132,8 @@ class FxStringValidator {
     return false;
   }
 
-  static bool validateString(String string, {
+  static bool validateString(
+    String string, {
     int minLength = 8,
     int maxLength = 20,
     bool firstCapital = false,
@@ -209,11 +210,8 @@ class FxStringValidator {
     return (!regex.hasMatch(email));
   }
 
-
-  static bool validateStringRange(String text, [
-    int minLength = 8,
-    int maxLength = 20]) {
+  static bool validateStringRange(String text,
+      [int minLength = 8, int maxLength = 20]) {
     return text.length >= minLength && text.length <= maxLength;
   }
-
 }
