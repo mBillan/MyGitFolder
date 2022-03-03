@@ -15,7 +15,7 @@ class LoginController extends FxController {
   late TextEditingController emailTE = TextEditingController();
   late TextEditingController passwordTE = TextEditingController();
 
-  // FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   GlobalKey<FormState> formKey = GlobalKey();
 
@@ -62,16 +62,15 @@ class LoginController extends FxController {
       String password = passwordTE.text;
 
       try {
-        // UserCredential result = await auth.signInWithEmailAndPassword(
-        //     email: email, password: password);
-        //
-        // if (result.user != null) {
-        //   showSnackBar("Login is done");
-        //   goToHomeScreen();
-        // } else {
-        //   showSnackBar("Something wrong login");
-        // }
-        throw FirebaseAuthException(code: Auth.emailAlreadyInUse);
+        UserCredential result = await auth.signInWithEmailAndPassword(
+            email: email, password: password);
+
+        if (result.user != null) {
+          showSnackBar("Login is done!");
+          goToHomeScreen();
+        } else {
+          showSnackBar("Something wrong login");
+        }
       } on FirebaseAuthException catch (error) {
         switch (error.code){
           case Auth.emailAlreadyInUse:

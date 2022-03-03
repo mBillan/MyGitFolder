@@ -1,10 +1,15 @@
 import 'package:fan_cate/screens/login_screen.dart';
 import 'package:fan_cate/screens/root_screen.dart';
 import 'package:fan_cate/theme/app_notifier.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

@@ -52,6 +52,10 @@ dependencies:
   syncfusion_flutter_charts: ^19.4.38
   syncfusion_flutter_gauges: ^19.4.38
 
+  # FlutterFire - Firebase plugins
+  firebase_core: ^1.13.1
+  firebase_auth: ^3.3.9
+
   # Other
   google_maps_flutter: ^2.0.3
   shimmer: ^2.0.0
@@ -60,7 +64,7 @@ dependencies:
   rive: ^0.8.1
   flare_flutter: ^3.0.2
   flutter_intro: ^2.3.1
-  firebase_auth: ^3.3.9
+
 
 dev_dependencies:
   flutter_test:
