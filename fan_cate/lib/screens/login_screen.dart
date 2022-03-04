@@ -1,12 +1,10 @@
 import 'package:fan_cate/screens/forgot_password_screen.dart';
-import 'package:fan_cate/screens/full_app.dart';
 import 'package:fan_cate/screens/register_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/theme/constant.dart';
 import 'package:fan_cate/widgets/text_form_field/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
-import 'package:fan_cate/src/toast.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -117,9 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadiusAll: 8,
                       onPressed: () {
                         controller.login();
-                        // Navigator.of(context, rootNavigator: true).push(
-                        //   MaterialPageRoute(builder: (context) => FullApp()),
-                        // );
                       },
                       backgroundColor: customTheme.estatePrimary,
                       child: FxText.l1(
