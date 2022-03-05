@@ -7,12 +7,14 @@ import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
 import '../data/user.dart';
 import '../loading_effect.dart';
+import '../widgets/text_form_field/text_form_field.dart';
 import 'login_screen.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final UserController userController;
 
-  const ProfileEditScreen({Key? key, required this.userController}) : super(key: key);
+  const ProfileEditScreen({Key? key, required this.userController})
+      : super(key: key);
 
   @override
   _ProfileEditScreenState createState() => _ProfileEditScreenState();
@@ -27,7 +29,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+  }
 
+  @override
+  void dispose(){
+    super.dispose();
   }
 
   @override
@@ -37,8 +43,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           colorScheme: theme.colorScheme
               .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
       child: Scaffold(
-          body: _buildBody(widget.userController),
-
+        body: _buildBody(widget.userController),
       ),
     );
   }
@@ -67,61 +72,32 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             textAlign: TextAlign.center,
           ),
           FxSpacing.height(32),
-          FxTextField(
-            labelText: controller.user?.displayName,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            autoFocusedBorder: true,
-            textFieldStyle: FxTextFieldStyle.outlined,
-            textFieldType: FxTextFieldType.name,
-            filled: true,
-            fillColor: customTheme.estatePrimary.withAlpha(40),
-            enabledBorderColor: customTheme.estatePrimary,
-            focusedBorderColor: customTheme.estatePrimary,
-            prefixIconColor: customTheme.estatePrimary,
-            labelTextColor: customTheme.estatePrimary,
-            cursorColor: customTheme.estatePrimary,
-          ),
-          FxSpacing.height(24),
-          FxTextField(
-            labelText: controller.user?.email,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            autoFocusedBorder: true,
-            textFieldStyle: FxTextFieldStyle.outlined,
-            textFieldType: FxTextFieldType.email,
-            filled: true,
-            fillColor: customTheme.estatePrimary.withAlpha(40),
-            enabledBorderColor: customTheme.estatePrimary,
-            focusedBorderColor: customTheme.estatePrimary,
-            prefixIconColor: customTheme.estatePrimary,
-            labelTextColor: customTheme.estatePrimary,
-            cursorColor: customTheme.estatePrimary,
-          ),
-          FxSpacing.height(24),
-          FxTextField(
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            autoFocusedBorder: true,
-            textFieldStyle: FxTextFieldStyle.outlined,
-            textFieldType: FxTextFieldType.password,
-            filled: true,
-            fillColor: customTheme.estatePrimary.withAlpha(40),
-            enabledBorderColor: customTheme.estatePrimary,
-            focusedBorderColor: customTheme.estatePrimary,
-            prefixIconColor: customTheme.estatePrimary,
-            labelTextColor: customTheme.estatePrimary,
-            cursorColor: customTheme.estatePrimary,
+          Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                FxText(controller.user?.displayName ?? '',
+                    ),
+                FxSpacing.height(24),
+                TextFormFieldStyled(
+                    hintText: "Username",
+                    controller: controller.displayNameTE,
+                    validator: controller.validateDisplayName,
+                    icon: Icons.person_outline),
+                FxSpacing.height(24),
+              ],
+            ),
           ),
           FxSpacing.height(16),
           FxButton.block(
-              borderRadiusAll: 8,
-              onPressed: () {
-                showToast(context, "Updated successfully!");
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-              backgroundColor: customTheme.estatePrimary,
-              child: FxText.l1(
-                "Update",
-                color: customTheme.cookifyOnPrimary,
-              )),
+            borderRadiusAll: 8,
+            onPressed: controller.updateDisplayName,
+            backgroundColor: customTheme.estatePrimary,
+            child: FxText.l1(
+              "Update",
+              color: customTheme.cookifyOnPrimary,
+            ),
+          ),
           FxSpacing.height(16),
           FxButton.text(
               onPressed: () {

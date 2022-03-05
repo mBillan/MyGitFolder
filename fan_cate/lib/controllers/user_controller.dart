@@ -1,3 +1,4 @@
+import 'package:fan_cate/screens/full_app.dart';
 import 'package:fan_cate/screens/login_screen.dart';
 import 'package:fan_cate/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,8 @@ class UserController extends FxController {
   bool loading = false;
   FirebaseAuth auth = FirebaseAuth.instance;
   User? user;
+  GlobalKey<FormState> formKey = GlobalKey();
+  late TextEditingController displayNameTE;
 
   UserController() {
     save = false;
@@ -19,10 +22,35 @@ class UserController extends FxController {
     update();
 
     user = auth.currentUser;
+    displayNameTE = TextEditingController(text: auth.currentUser?.displayName);
+
     update();
 
     loading = false;
     update();
+  }
+
+  Future<void> updateDisplayName() async {
+    loading = true;
+    update();
+
+    if (formKey.currentState!.validate()) {
+      await user?.updateDisplayName(displayNameTE.text);
+      update();
+      showSnackBar("Updated successfully");
+      goToProfile();
+    }
+
+    loading = false;
+    update();
+  }
+
+  void goToProfile() {
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const FullApp(page: Pages.profile),
+        ),
+        (route) => false);
   }
 
   void goToLogin() {
@@ -43,14 +71,36 @@ class UserController extends FxController {
 
   void logout() async {
     await auth.signOut();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => LoginScreen()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
   }
 
   @override
   String getTag() {
     return "user_controller";
+  }
+
+  String? validateDisplayName(String? displayName) {
+    const int minLength = 4, maxLength = 20;
+    if (displayName == null || displayName.isEmpty) {
+      return "Please enter email";
+    }
+    if (FxStringValidator.isSpecialCharacterIncluded(displayName)) {
+      return "Please don't use special characters";
+    }
+    if (!FxStringValidator.validateStringRange(
+        displayName, minLength, maxLength)) {
+      return "Username length must between $minLength and $maxLength";
+    }
+    return null;
+  }
+
+  void showSnackBar(String content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
   }
 }

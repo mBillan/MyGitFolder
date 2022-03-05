@@ -10,7 +10,6 @@ class ForgotPasswordController extends FxController {
   GlobalKey<FormState> formKey = GlobalKey();
 
   bool loading = false;
-  // FirebaseAuth auth = FirebaseAuth.instance;
   UserController userController = FxControllerStore.putOrFind(UserController());
 
 

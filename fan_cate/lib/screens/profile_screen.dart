@@ -1,5 +1,6 @@
 import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 
@@ -7,6 +8,8 @@ import '../controllers/user_controller.dart';
 import '../loading_effect.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -22,9 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    userController = FxControllerStore.putOrFind(UserController());
+    // Note: putOrFind searches for a previously defined controller from the same type and might use it.
+    // put, always generates a new one
+    userController = FxControllerStore.put(UserController());
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    print('init profile screen, key:${userController.formKey.toString()}');
+
   }
 
   @override
@@ -34,7 +41,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("context of profile is ${context.toString()}, key:${widget.key.toString()}");
     return FxBuilder<UserController>(
+      key: widget.key ?? GlobalKey(debugLabel: "ProfileScreen Widget key"),
         controller: userController,
         builder: (controller) {
           return Theme(
@@ -101,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: FxSpacing.xy(16, 4),
                           borderRadiusAll: 32,
                           child: FxText.b3("Edit profile",
-                              color: customTheme.estatePrimary))
+                              color: customTheme.estatePrimary)),
                     ],
                   ),
                 ),
@@ -152,12 +161,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: FxButton.rounded(
                     onPressed: () {
                       controller.logout();
-                      // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                      //   MaterialPageRoute(
-                      //       builder: (context) => LoginScreen(),
-                      //   ),
-                      //   ModalRoute.withName(''),
-                      // );
                     },
                     child: FxText.l1(
                       "LOGOUT",

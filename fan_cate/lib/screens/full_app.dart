@@ -6,7 +6,17 @@ import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:flutter/material.dart';
 
+enum Pages{
+  home,
+  chat,
+  addPost,
+  profile
+}
+
 class FullApp extends StatefulWidget {
+  const FullApp({Key? key, this.page}) : super(key: key);
+  final Pages? page;
+
   @override
   _FullAppState createState() => _FullAppState();
 }
@@ -103,7 +113,7 @@ class _FullAppState extends State<FullApp> {
           backgroundColor: customTheme.card,
           showLabel: false,
           labelSpacing: 8,
-          initialIndex: 0,
+          initialIndex: widget.page?.index ?? 0,
           labelDirection: Axis.horizontal,
         ),
       ),
