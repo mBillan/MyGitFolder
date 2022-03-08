@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/src/toast.dart';
 
+import '../controllers/add_post_controller.dart';
+import '../loading_effect.dart';
 
 class AddPostScreen extends StatefulWidget {
   @override
@@ -15,12 +17,14 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
+  late AddPostController addPostController;
 
   @override
   void initState() {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    addPostController = FxControllerStore.putOrFind(AddPostController());
   }
 
   @override
@@ -29,7 +33,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
       data: theme.copyWith(
           colorScheme: theme.colorScheme
               .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
-      child: Scaffold(
+      child: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if (addPostController.uiLoading) {
+      return Container(
+        margin: FxSpacing.top(16),
+        child: LoadingEffect.getFavouriteLoadingScreen(
+          context,
+        ),
+      );
+    } else {
+      return Scaffold(
         body: ListView(
           padding: FxSpacing.fromLTRB(24, 100, 24, 0),
           children: [
@@ -60,24 +77,27 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             FxSpacing.height(24),
             FxButton.block(
-                borderRadiusAll: 8,
-                onPressed: () {
-                  showToast(context, "Posting in the background");
-                  setState(() {
+              borderRadiusAll: 8,
+              onPressed: () {
+                showToast(context, "Posting in the background");
 
-                  });
-                  // Navigator.of(context, rootNavigator: true).push(
-                  //   MaterialPageRoute(builder: (context) => FullApp()),
-                  // );
-                },
-                backgroundColor: customTheme.estatePrimary,
-                child: FxText.l1(
-                  "Post",
-                  color: customTheme.cookifyOnPrimary,
-                ),),
+                addPostController.addPost(context);
+                // setState(() {
+                //
+                // });
+                // Navigator.of(context, rootNavigator: true).push(
+                //   MaterialPageRoute(builder: (context) => FullApp()),
+                // );
+              },
+              backgroundColor: customTheme.estatePrimary,
+              child: FxText.l1(
+                "Post",
+                color: customTheme.cookifyOnPrimary,
+              ),
+            ),
           ],
         ),
-      ),
-    );
+      );
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:fan_cate/screens/add_post.dart';
+import 'package:fan_cate/screens/add_post_screen.dart';
 import 'package:fan_cate/screens/chat_screen.dart';
 import 'package:fan_cate/screens/home_screen.dart';
 import 'package:fan_cate/screens/profile_screen.dart';
