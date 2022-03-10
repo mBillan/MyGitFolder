@@ -230,21 +230,38 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Generator.buildOverlaysProfile(
-                      images: [
-                        './assets/images/profile/avatar_3.jpg',
-                        './assets/images/profile/avatar_5.jpg',
-                        './assets/images/profile/avatar_2.jpg',
-                      ],
-                      enabledOverlayBorder: true,
-                      overlayBorderColor: customTheme.card,
-                      overlayBorderThickness: 1.7,
-                      leftFraction: 0.72,
-                      size: 24),
+                    images: [
+                      './assets/images/profile/avatar_3.jpg',
+                      './assets/images/profile/avatar_5.jpg',
+                      './assets/images/profile/avatar_2.jpg',
+                    ],
+                    enabledOverlayBorder: true,
+                    overlayBorderColor: customTheme.card,
+                    overlayBorderThickness: 1.7,
+                    leftFraction: 0.72,
+                    size: 24,
+                  ),
+                  Icon(
+                    MdiIcons.heartOutline,
+                    size: 20,
+                    color: theme.colorScheme.onBackground.withAlpha(200),
+                  ),
+                  FxText.caption(post.likes.toString(),
+                      letterSpacing: 0,
+                      color: theme.colorScheme.onBackground),
                   Container(
-                    margin: FxSpacing.left(4),
-                    child: FxText.caption(post.likes.toString(),
-                        letterSpacing: 0,
-                        color: theme.colorScheme.onBackground),
+                    margin: FxSpacing.left(16),
+                    child: Icon(MdiIcons.commentOutline,
+                        size: 20,
+                        color: theme.colorScheme.onBackground.withAlpha(200)),
+                  ),
+                  Container(
+                    margin: FxSpacing.left(16),
+                    child: Icon(
+                      MdiIcons.shareOutline,
+                      size: 20,
+                      color: theme.colorScheme.onBackground.withAlpha(200),
+                    ),
                   ),
                   Expanded(
                     child: Container(
