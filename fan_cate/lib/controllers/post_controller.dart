@@ -3,7 +3,6 @@ import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/data/post.dart';
 import '../src/engagement.dart';
 
-
 class PostController extends FxController {
   bool showLoading = true, uiLoading = true;
   Map<String, Post>? posts;
@@ -53,12 +52,9 @@ class PostController extends FxController {
   }
 
   Future<void> updateLikes(String postID, EngagementType engage) async {
-    // showLoading = true;
-    // uiLoading = true;
-
     int newLikes = posts![postID]!.likes;
 
-    switch(engage){
+    switch (engage) {
       case EngagementType.like:
         newLikes += 1;
         break;
@@ -70,11 +66,8 @@ class PostController extends FxController {
     }
 
     await postsCollection!.doc(postID).update({"likes": newLikes});
-
-    // postsCollection.
-    // showLoading = false;
-    // uiLoading = false;
   }
+
   @override
   String getTag() {
     return "post_controller";
