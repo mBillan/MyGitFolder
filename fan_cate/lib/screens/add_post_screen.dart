@@ -8,6 +8,7 @@ import 'package:fan_cate/src/toast.dart';
 
 import '../controllers/add_post_controller.dart';
 import '../loading_effect.dart';
+import '../widgets/text_form_field/text_form_field.dart';
 
 class AddPostScreen extends StatefulWidget {
   @override
@@ -29,12 +30,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: theme.copyWith(
-          colorScheme: theme.colorScheme
-              .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
-      child: _buildBody(),
-    );
+    return FxBuilder<AddPostController>(
+        controller: addPostController,
+        builder: (controller) {
+          return Theme(
+            data: theme.copyWith(
+                colorScheme: theme.colorScheme.copyWith(
+                    secondary: customTheme.estatePrimary.withAlpha(40))),
+            child: _buildBody(),
+          );
+        });
   }
 
   Widget _buildBody() {
@@ -62,32 +67,25 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             FxSpacing.height(32),
             // Post field
-            FxTextField(
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              autoFocusedBorder: true,
-              textFieldStyle: FxTextFieldStyle.outlined,
-              textFieldType: FxTextFieldType.post,
-              filled: true,
-              fillColor: customTheme.estatePrimary.withAlpha(40),
-              enabledBorderColor: customTheme.estatePrimary,
-              focusedBorderColor: customTheme.estatePrimary,
-              prefixIconColor: customTheme.estatePrimary,
-              labelTextColor: customTheme.estatePrimary,
-              cursorColor: customTheme.estatePrimary,
+            Form(
+              key: addPostController.formKey,
+              child: Column(
+                children: [
+                  TextFormFieldStyled(
+                    hintText: "Post",
+                    controller: addPostController.statusTE,
+                    validator: addPostController.validateStatus,
+                    icon: Icons.post_add,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                ],
+              ),
             ),
             FxSpacing.height(24),
             FxButton.block(
               borderRadiusAll: 8,
               onPressed: () {
-                showToast(context, "Posting in the background");
-
                 addPostController.addPost(context);
-                // setState(() {
-                //
-                // });
-                // Navigator.of(context, rootNavigator: true).push(
-                //   MaterialPageRoute(builder: (context) => FullApp()),
-                // );
               },
               backgroundColor: customTheme.estatePrimary,
               child: FxText.l1(

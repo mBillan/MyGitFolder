@@ -79,7 +79,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
         Container(
           margin: FxSpacing.top(12),
           child: Image(
-            image: AssetImage(widget.post.postImage),
+            image: AssetImage(widget.post.postImage ?? './assets/images/profile/avatar_place.png'),
             height: MediaQuery.of(context).size.height * 0.45,
             fit: BoxFit.cover,
           ),

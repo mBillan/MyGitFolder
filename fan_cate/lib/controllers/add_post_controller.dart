@@ -1,72 +1,77 @@
 import 'package:fan_cate/controllers/user_controller.dart';
-import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/data/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddPostController extends FxController {
-  bool showLoading = true,
-      uiLoading = false;
-  late Post post;
+  bool showLoading = true, uiLoading = false;
+  GlobalKey<FormState> formKey = GlobalKey();
   UserController userController = FxControllerStore.putOrFind(UserController());
-
+  late TextEditingController statusTE = TextEditingController();
 
   AddPostController() {
-    post = Post(
-      profileImage: 'assets/images/profile/avatar_2.jpg',
-      // profileImage: userController.user?.photoURL,
-      name: userController.user?.displayName ?? '',
-      status: 'Hello, how can i help you man?', // Take it from the Text Editor
-      time: Timestamp.now().toString(),
-      postImage: 'assets/images/apps/social/post-1.jpg', // if any, we'll start without it
-      comments: [
-        "That's a good one",
-        "you rock!!",
-        "This talk no walk",
-        "I have hour order the coffee!",
-        "Pain",
-        "You've got to do what you've got to do"
-      ],
-      likes: 52344,
-    );
+    // TODO: add a postImage controller
+    statusTE = TextEditingController(text: '');
   }
-
-
-
 
   @override
   String getTag() {
     return "add_post_controller";
   }
 
+  String? validateStatus(String? status) {
+    const int minLength = 4, maxLength = 200;
+    if (status == null || status.isEmpty) {
+      return "Please enter your status";
+    }
+    if (FxStringValidator.isSpecialCharacterIncluded(status)) {
+      return "Please don't use special characters";
+    }
+    if (!FxStringValidator.validateStringRange(
+        status, minLength, maxLength)) {
+      return "Username length must between $minLength and $maxLength";
+    }
+    return null;
+  }
+
   Future<void> addPost(BuildContext context) async {
     uiLoading = true;
     update();
 
-    await addPosToFirebase(context);
+    if(formKey.currentState!.validate()) {
+      Post post = Post(
+        profileImage: userController.user?.photoURL ??
+            './assets/images/profile/avatar_place.png',
+        name: userController.user?.displayName ?? '',
+        status: statusTE.text,
+        time: Timestamp.now().toString(),
+        // TODO: add a postImage controller
+        postImage: './assets/images/apps/social/post-1.jpg',
+      );
 
+      await addPosToFirebase(context, post);
+    }
     uiLoading = false;
     update();
-
-    // Navigator.of(context, rootNavigator: true).push();
   }
 
-  Future<void> addPosToFirebase(BuildContext context) async {
+  Future<void> addPosToFirebase(BuildContext context, Post post) async {
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
-    // Call the posts CollectionReference to add a new user
+    // Call the posts CollectionReference to add a new post
     return posts
         .add({
-      'uid': userController.user?.uid,
-      'status': post.status,
-      'time': post.time, //Timestamp.now().toString(),
-      'postImage': post.postImage,
-      'likes': post.likes,
-      'comments': post.comments
-    })
+          'uid': userController.user?.uid,
+          'status': post.status,
+          'time': post.time,
+          'postImage': post.postImage,
+          'likes': post.likes,
+          'comments': post.comments
+        })
         .then((value) => showSnackBar(context, 'Post added'))
-        .catchError((error) => showSnackBar(context, "Failed to add post: $error"));
+        .catchError(
+            (error) => showSnackBar(context, "Failed to add post: $error"));
   }
 
   void showSnackBar(BuildContext context, String content) {

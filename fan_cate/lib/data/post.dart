@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
-  final String profileImage, name, status, postImage;
-  final String time;
+  final String profileImage, name, status, time;
+  final String? postImage;
   final List<String>? comments;
   final int likes;
 
@@ -10,7 +9,7 @@ class Post {
       {required this.profileImage,
       required this.name,
       required this.status,
-      required this.postImage,
+      this.postImage,
       required this.time,
       this.likes = 0,
       this.comments = const []});

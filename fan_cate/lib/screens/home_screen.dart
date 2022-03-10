@@ -24,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late User user;
 
 
-  // late List<Post> posts;
   late CustomTheme customTheme;
   late ThemeData theme;
 
@@ -34,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = User.getOne();
-    // posts = Post.postsList();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
 
@@ -198,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
               margin: FxSpacing.top(12),
               child: Image(
                 image: AssetImage(
-                  post.postImage,
+                  post.postImage ?? './assets/images/profile/avatar_place.png',
                 ),
                 height: 240,
                 width: MediaQuery.of(context).size.width,
