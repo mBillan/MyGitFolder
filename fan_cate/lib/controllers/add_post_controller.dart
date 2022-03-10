@@ -40,12 +40,16 @@ class AddPostController extends FxController {
     update();
 
     if(formKey.currentState!.validate()) {
+      DateTime now = DateTime.now();
+      String currTime = "${now.hour}:${now.minute} ${now.day}/${now.month}/${now.year}";
+
       Post post = Post(
         profileImage: userController.user?.photoURL ??
             './assets/images/profile/avatar_place.png',
         name: userController.user?.displayName ?? '',
         status: statusTE.text,
-        time: Timestamp.now().toString(),
+
+        time: currTime,
         // TODO: add a postImage controller
         postImage: './assets/images/apps/social/post-1.jpg',
       );
