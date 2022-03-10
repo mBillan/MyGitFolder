@@ -34,17 +34,15 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
     focusedBorderOutline = OutlineInputBorder(
-      borderRadius:
-      BorderRadius.all(Radius.circular(MaterialRadius().small)),
+      borderRadius: BorderRadius.all(Radius.circular(MaterialRadius().small)),
       borderSide: BorderSide(
-        color:
-        customTheme.estatePrimary,
+        color: customTheme.estatePrimary,
       ),
     );
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -78,17 +76,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormFieldStyled(
-                            hintText: "Email Address",
-                            controller: controller.emailTE,
-                            validator: controller.validateEmail,
-                            icon: Icons.email_outlined),
+                          hintText: "Email Address",
+                          controller: controller.emailTE,
+                          validator: controller.validateEmail,
+                          icon: Icons.email_outlined,
+                          keyboardType: TextInputType.emailAddress,
+                          maxLines: 1,
+                        ),
                         FxSpacing.height(24),
                         TextFormFieldStyled(
-                            hintText: "Password",
-                            controller: controller.passwordTE,
-                            validator: controller.validatePassword,
-                            icon: Icons.lock_outline,
+                          hintText: "Password",
+                          controller: controller.passwordTE,
+                          validator: controller.validatePassword,
+                          icon: Icons.lock_outline,
                           obscureText: true,
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -125,9 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Don't have an account
                   FxButton.text(
                       onPressed: () {
-                        setState(() {
-
-                        });
+                        setState(() {});
                         Navigator.of(context, rootNavigator: true).push(
                           MaterialPageRoute(
                               builder: (context) => RegisterScreen()),

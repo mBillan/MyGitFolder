@@ -32,7 +32,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -76,14 +76,18 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             key: controller.formKey,
             child: Column(
               children: [
-                FxText(controller.user?.displayName ?? '',
-                    ),
+                FxText(
+                  controller.user?.displayName ?? '',
+                ),
                 FxSpacing.height(24),
                 TextFormFieldStyled(
-                    hintText: "Username",
-                    controller: controller.displayNameTE,
-                    validator: controller.validateDisplayName,
-                    icon: Icons.person_outline),
+                  hintText: "Username",
+                  controller: controller.displayNameTE,
+                  validator: controller.validateDisplayName,
+                  icon: Icons.person_outline,
+                  keyboardType: TextInputType.text,
+                  maxLines: 1,
+                ),
                 FxSpacing.height(24),
               ],
             ),

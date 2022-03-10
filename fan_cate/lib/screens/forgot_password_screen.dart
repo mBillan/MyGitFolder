@@ -9,12 +9,10 @@ import 'register_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
-  _ForgotPasswordScreenState createState() =>
-      _ForgotPasswordScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState
-    extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late ThemeData theme;
   late CustomTheme customTheme;
 
@@ -27,7 +25,8 @@ class _ForgotPasswordScreenState
     super.initState();
     theme = AppTheme.theme;
     customTheme = AppTheme.customTheme;
-    forgotPasswordController = FxControllerStore.putOrFind(ForgotPasswordController());
+    forgotPasswordController =
+        FxControllerStore.putOrFind(ForgotPasswordController());
     enabledBorderOutline = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(MaterialRadius().small)),
       borderSide: const BorderSide(
@@ -35,84 +34,81 @@ class _ForgotPasswordScreenState
       ),
     );
     focusedBorderOutline = OutlineInputBorder(
-      borderRadius:
-      BorderRadius.all(Radius.circular(MaterialRadius().small)),
+      borderRadius: BorderRadius.all(Radius.circular(MaterialRadius().small)),
       borderSide: BorderSide(
-        color:
-        customTheme.estatePrimary,
+        color: customTheme.estatePrimary,
       ),
     );
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FxBuilder<ForgotPasswordController>(
-      controller: forgotPasswordController,
-      builder: (controller) {
-        return Theme(
-          data: theme.copyWith(
-              colorScheme: theme.colorScheme
-                  .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
-          child: Scaffold(
-            body: ListView(
-              padding: FxSpacing.fromLTRB(24, 200, 24, 0),
-              children: [
-                FxTwoToneIcon(
-                  FxTwoToneMdiIcons.person,
-                  color: customTheme.estatePrimary,
-                  size: 64,
-                ),
-                FxSpacing.height(16),
-                FxText.h3(
-                  "Forgot Password",
-                  color: customTheme.estatePrimary,
-                  fontWeight: 800,
-                  textAlign: TextAlign.center,
-                ),
-                FxSpacing.height(32),
-                Form(
-                  key: controller.formKey,
-                  child:
-                TextFormFieldStyled(
-                    hintText: "Email Address",
-                    controller: controller.emailTE,
-                    validator: controller.validateEmail,
-                    icon: Icons.email_outlined),
-
-                ),
-                FxSpacing.height(32),
-                FxButton.block(
-                    borderRadiusAll: 8,
-                    onPressed: () {
-                      controller.forgotPassword();
-                    },
-                    backgroundColor: customTheme.estatePrimary,
-                    child: FxText.l1(
-                      "Forgot Password",
-                      color: customTheme.cookifyOnPrimary,
-                    )),
-                FxSpacing.height(16),
-                FxButton.text(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                            builder: (context) => RegisterScreen()),
-                      );
-                    },
-                    splashColor: customTheme.estatePrimary.withAlpha(40),
-                    child: FxText.b3("I don\'t have an account",
-                        decoration: TextDecoration.underline,
-                        color: customTheme.estatePrimary))
-              ],
+        controller: forgotPasswordController,
+        builder: (controller) {
+          return Theme(
+            data: theme.copyWith(
+                colorScheme: theme.colorScheme.copyWith(
+                    secondary: customTheme.estatePrimary.withAlpha(40))),
+            child: Scaffold(
+              body: ListView(
+                padding: FxSpacing.fromLTRB(24, 200, 24, 0),
+                children: [
+                  FxTwoToneIcon(
+                    FxTwoToneMdiIcons.person,
+                    color: customTheme.estatePrimary,
+                    size: 64,
+                  ),
+                  FxSpacing.height(16),
+                  FxText.h3(
+                    "Forgot Password",
+                    color: customTheme.estatePrimary,
+                    fontWeight: 800,
+                    textAlign: TextAlign.center,
+                  ),
+                  FxSpacing.height(32),
+                  Form(
+                    key: controller.formKey,
+                    child: TextFormFieldStyled(
+                      hintText: "Email Address",
+                      controller: controller.emailTE,
+                      validator: controller.validateEmail,
+                      icon: Icons.email_outlined,
+                      maxLines: 1,
+                    ),
+                  ),
+                  FxSpacing.height(32),
+                  FxButton.block(
+                      borderRadiusAll: 8,
+                      onPressed: () {
+                        controller.forgotPassword();
+                      },
+                      backgroundColor: customTheme.estatePrimary,
+                      child: FxText.l1(
+                        "Forgot Password",
+                        color: customTheme.cookifyOnPrimary,
+                      )),
+                  FxSpacing.height(16),
+                  FxButton.text(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => RegisterScreen()),
+                        );
+                      },
+                      splashColor: customTheme.estatePrimary.withAlpha(40),
+                      child: FxText.b3("I don\'t have an account",
+                          decoration: TextDecoration.underline,
+                          color: customTheme.estatePrimary))
+                ],
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }

@@ -75,16 +75,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: [
                         TextFormFieldStyled(
-                            hintText: "Username",
-                            controller: controller.usernameTE,
-                            validator: controller.validateUsername,
-                            icon: Icons.person_outline),
+                          hintText: "Username",
+                          controller: controller.usernameTE,
+                          validator: controller.validateUsername,
+                          icon: Icons.person_outline,
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                        ),
                         FxSpacing.height(24),
                         TextFormFieldStyled(
-                            hintText: "Email Address",
-                            controller: controller.emailTE,
-                            validator: controller.validateEmail,
-                            icon: Icons.email_outlined),
+                          hintText: "Email Address",
+                          controller: controller.emailTE,
+                          validator: controller.validateEmail,
+                          icon: Icons.email_outlined,
+                          keyboardType: TextInputType.emailAddress,
+                          maxLines: 1,
+                        ),
                         FxSpacing.height(24),
                         TextFormFieldStyled(
                           hintText: "Password",
@@ -92,6 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           validator: controller.validatePassword,
                           icon: Icons.lock_outline,
                           obscureText: true,
+                          maxLines: 1,
                         ),
                       ],
                     ),
