@@ -1,19 +1,16 @@
 import 'dart:math';
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
-import 'package:fan_cate/screens/donation_screen.dart';
 import 'package:fan_cate/screens/social_post_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../data/post.dart';
+import '../src/engagement.dart';
 import '../utils/generator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -105,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
 
-                      postController.updatePosts(snapshot.data!.docs);
+                      postController.reloadPosts(snapshot.data!.docs);
 
                       return Expanded(
                         child: _buildBody(),
@@ -137,20 +134,27 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> buildPosts() {
     List<Widget> postsList = [];
 
-    for (Post post in postController.posts!) {
-      postsList.add(singlePost(post: post));
+    for (String postID in postController.posts!.keys) {
+      // Post post = postController.posts![postID]!;
+      postsList.add(singlePost(postID: postID));
     }
 
     return postsList;
   }
 
-  Widget singlePost({required Post post}) {
+  Widget singlePost({required String postID}) {
+    Post post = postController.posts![postID]!;
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SocialPostScreen(post: post)));
+          context,
+          MaterialPageRoute(
+            builder: (context) => SocialPostScreen(
+              postID: postID,
+              postController: postController,
+            ),
+          ),
+        );
       },
       child: Container(
         margin: FxSpacing.fromLTRB(0, 12, 0, 16),
@@ -241,14 +245,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     leftFraction: 0.72,
                     size: 24,
                   ),
-                  Icon(
-                    MdiIcons.heartOutline,
-                    size: 20,
-                    color: theme.colorScheme.onBackground.withAlpha(200),
+
+                  InkWell(
+                    child: Icon(
+                      MdiIcons.heartOutline,
+                      size: 20,
+                      color: theme.colorScheme.onBackground.withAlpha(200),
+                    ),
+                    onTap: () async {
+                      postController.updateLikes(postID, EngagementType.like);
+                    },
                   ),
                   FxText.caption(post.likes.toString(),
-                      letterSpacing: 0,
-                      color: theme.colorScheme.onBackground),
+                      letterSpacing: 0, color: theme.colorScheme.onBackground),
                   Container(
                     margin: FxSpacing.left(16),
                     child: Icon(MdiIcons.commentOutline,

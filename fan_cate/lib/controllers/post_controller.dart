@@ -1,30 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/data/post.dart';
+import '../src/engagement.dart';
+
 
 class PostController extends FxController {
   bool showLoading = true, uiLoading = true;
-  List<Post>? posts;
+  Map<String, Post>? posts;
   Stream<QuerySnapshot>? postsStream;
+  CollectionReference? postsCollection;
 
   @override
   initState() {
     super.save = false;
     super.initState();
 
-    postsStream = FirebaseFirestore.instance.collection('posts').snapshots();
+    postsCollection = FirebaseFirestore.instance.collection('posts');
+    postsStream = postsCollection?.snapshots();
 
     showLoading = false;
     uiLoading = false;
     update();
   }
 
-  void updatePosts(List<QueryDocumentSnapshot<Object?>> docs) {
+  void reloadPosts(List<QueryDocumentSnapshot<Object?>> docs) {
     showLoading = true;
     uiLoading = true;
 
     print("Updating the posts");
-    List<Post> updatedPostsList = [];
+    Map<String, Post> updatedPostsList = {};
     for (int idx = 0; idx < docs.length; idx++) {
       Map<String, dynamic> data = docs[idx].data()! as Map<String, dynamic>;
       // TODO: update it the post with the user's real info after adding a User's record to the Firebase
@@ -40,8 +44,7 @@ class PostController extends FxController {
         time: data["time"],
         comments: data["comments"], // The comments are of type: List<dynamic>?
       );
-
-      updatedPostsList.add(currPost);
+      updatedPostsList[docs[idx].id] = currPost;
     }
 
     posts = updatedPostsList;
@@ -49,6 +52,29 @@ class PostController extends FxController {
     uiLoading = false;
   }
 
+  Future<void> updateLikes(String postID, EngagementType engage) async {
+    // showLoading = true;
+    // uiLoading = true;
+
+    int newLikes = posts![postID]!.likes;
+
+    switch(engage){
+      case EngagementType.like:
+        newLikes += 1;
+        break;
+      case EngagementType.dislike:
+        newLikes -= 1;
+        break;
+      default:
+        break;
+    }
+
+    await postsCollection!.doc(postID).update({"likes": newLikes});
+
+    // postsCollection.
+    // showLoading = false;
+    // uiLoading = false;
+  }
   @override
   String getTag() {
     return "post_controller";
