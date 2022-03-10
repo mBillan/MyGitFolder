@@ -2,7 +2,7 @@
 class Post {
   final String profileImage, name, status, time;
   final String? postImage;
-  final List<String>? comments;
+  final List<dynamic>? comments;
   final int likes;
 
   Post(

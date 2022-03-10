@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
@@ -22,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late User user;
-
 
   late CustomTheme customTheme;
   late ThemeData theme;
@@ -84,11 +84,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 0,
                             ),
                           ),
-
                         ]),
                   ),
-                  Expanded(
-                    child: _buildBody(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: postController.postsStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text(
+                            'Something went wrong while loading data from the DB');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          postController.uiLoading) {
+                        return Container(
+                          margin: FxSpacing.top(16),
+                          child: LoadingEffect.getFavouriteLoadingScreen(
+                            context,
+                          ),
+                        );
+                      }
+
+                      postController.updatePosts(snapshot.data!.docs);
+
+                      return Expanded(
+                        child: _buildBody(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -100,25 +122,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody() {
-    if (postController.uiLoading) {
-      return Container(
-        margin: FxSpacing.top(16),
-        child: LoadingEffect.getFavouriteLoadingScreen(
-          context,
-        ),
-      );
-    } else {
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            FxSpacing.height(20),
-            Column(
-              children: buildPosts(),
-            ),
-          ],
-        ),
-      );
-    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          FxSpacing.height(20),
+          Column(
+            children: buildPosts(),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> buildPosts() {
@@ -173,14 +186,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         FxText.caption(post.name,
                             color: theme.colorScheme.onBackground,
                             fontWeight: 600),
-                        FxText.caption(post.status,
-                            fontSize: 12,
-                            color: theme.colorScheme.onBackground,
-                            muted: true,
-                            fontWeight: 500),
                       ],
                     ),
                   ),
+                  const Spacer(),
                   Expanded(
                     child: Container(
                         alignment: Alignment.bottomRight,
@@ -201,6 +210,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 240,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              // padding: FxSpacing.all(10),
+              margin: FxSpacing.fromLTRB(10, 0, 16, 5),
+
+              child: FxText.caption(
+                post.status,
+                fontSize: 13,
+                color: theme.colorScheme.onBackground,
+                muted: true,
+                fontWeight: 500,
               ),
             ),
             Container(
@@ -256,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildComments({required List<String>? comments}) {
+  Widget buildComments({required List<dynamic>? comments}) {
     List<Widget> commentsWidgets = [];
 
     // Take only the first 3 comments
@@ -288,14 +310,14 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FxText.b2(username,
-              color: theme.colorScheme.onBackground, fontWeight: 700),
+          // TODO: Add the name of the commenter
+          // FxText.b2(username,
+          //     color: theme.colorScheme.onBackground, fontWeight: 700),
           Expanded(
             child: Container(
-              margin: FxSpacing.left(8),
               child: FxText.caption(
                 // Generator.getDummyText(5, withEmoji: true),
-                comment,
+                "- $comment",
                 color: theme.colorScheme.onBackground,
                 overflow: TextOverflow.ellipsis,
               ),
