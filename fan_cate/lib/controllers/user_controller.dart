@@ -12,6 +12,7 @@ class UserController extends FxController {
   GlobalKey<FormState> formKey = GlobalKey();
   late TextEditingController displayNameTE;
 
+
   UserController() {
     save = false;
     initUserData();
@@ -103,4 +104,5 @@ class UserController extends FxController {
       ),
     );
   }
+
 }

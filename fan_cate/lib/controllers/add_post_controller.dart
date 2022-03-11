@@ -4,6 +4,8 @@ import 'package:fan_cate/data/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../src/styledDateTime.dart';
+
 class AddPostController extends FxController {
   bool showLoading = true, uiLoading = false;
   GlobalKey<FormState> formKey = GlobalKey();
@@ -40,16 +42,13 @@ class AddPostController extends FxController {
     update();
 
     if(formKey.currentState!.validate()) {
-      DateTime now = DateTime.now();
-      String currTime = "${now.hour}:${now.minute} ${now.day}/${now.month}/${now.year}";
-
       Post post = Post(
         profileImage: userController.user?.photoURL ??
             './assets/images/profile/avatar_place.png',
         name: userController.user?.displayName ?? '',
         status: statusTE.text,
 
-        time: currTime,
+        time: currTimeStyled(),
         // TODO: add a postImage controller
         postImage: './assets/images/apps/social/post-1.jpg',
       );
