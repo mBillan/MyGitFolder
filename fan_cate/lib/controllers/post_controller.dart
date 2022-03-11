@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fan_cate/controllers/user_controller.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/data/post.dart';
+import 'package:fan_cate/src/styledDateTime.dart';
+import 'package:flutter/material.dart';
 import '../src/engagement.dart';
 
 class PostController extends FxController {
@@ -8,6 +11,8 @@ class PostController extends FxController {
   Map<String, Post>? posts;
   Stream<QuerySnapshot>? postsStream;
   CollectionReference? postsCollection;
+  GlobalKey<FormState> formKey = GlobalKey();
+  UserController userController = FxControllerStore.putOrFind(UserController());
 
   @override
   initState() {
@@ -71,5 +76,62 @@ class PostController extends FxController {
   @override
   String getTag() {
     return "post_controller";
+  }
+
+  String? validateComment(String? comment) {
+    const int minLength = 4, maxLength = 100;
+    if (comment == null || comment.isEmpty) {
+      return "Please enter a comment";
+    }
+    if (FxStringValidator.isSpecialCharacterIncluded(comment)) {
+      return "Please don't use special characters";
+    }
+    if (!FxStringValidator.validateStringRange(comment, minLength, maxLength)) {
+      return "Comment length must between $minLength and $maxLength";
+    }
+    return null;
+  }
+
+  Future<void> addComment(
+      BuildContext context, String comment, String postID) async {
+    if (formKey.currentState!.validate()) {
+      // TODO: Add the comment to the post list of comments
+      await addCommentToPost(comment, postID);
+      await addCommentToFirebase(context, comment, postID);
+    }
+  }
+
+  Future<void> addCommentToFirebase(
+      BuildContext context, String comment, String postID) async {
+    CollectionReference comments =
+        FirebaseFirestore.instance.collection('comments');
+
+    // Call the posts CollectionReference to add a new comment
+    return comments
+        .add({
+          'uid': userController.user?.uid,
+          'postID': postID,
+          'time': currTimeStyled(),
+          'text': comment,
+        })
+        .then((value) => showSnackBar(context, 'Comment added'))
+        .catchError(
+            (error) => showSnackBar(context, "Failed to add comment: $error"));
+  }
+
+  Future<void> addCommentToPost(String comment, String postID) async {
+    List<dynamic>? currComments = posts![postID]!.comments;
+    currComments?.add(comment);
+
+    await postsCollection!.doc(postID).update({"comments": currComments});
+  }
+
+  void showSnackBar(BuildContext context, String content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
   }
 }

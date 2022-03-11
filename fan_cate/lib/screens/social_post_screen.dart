@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/src/engagement.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/text_form_field/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -10,7 +11,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../data/post.dart';
 
 class SocialPostScreen extends StatefulWidget {
-  const SocialPostScreen({Key? key, required this.postID, required this.postController}) : super(key: key);
+  const SocialPostScreen(
+      {Key? key, required this.postID, required this.postController})
+      : super(key: key);
   final String postID;
   final PostController postController;
 
@@ -23,7 +26,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
   late ThemeData theme;
   late bool viewAllComments;
   late Post post;
-
+  late TextEditingController commentTE;
 
   @override
   void initState() {
@@ -32,17 +35,17 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
     theme = AppTheme.theme;
     viewAllComments = false;
     post = widget.postController.posts![widget.postID]!;
+    commentTE = TextEditingController(text: '');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildBody(),
-
     );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody() {
     return ListView(
       padding: FxSpacing.top(FxSpacing.safeAreaTop(context) + 20),
       children: [
@@ -66,8 +69,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FxText.caption(post.name,
-                        color: theme.colorScheme.onBackground,
-                        fontWeight: 600),
+                        color: theme.colorScheme.onBackground, fontWeight: 600),
                   ],
                 ),
               ),
@@ -87,8 +89,8 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
         Container(
           margin: FxSpacing.top(12),
           child: Image(
-            image: AssetImage(post.postImage ??
-                './assets/images/profile/avatar_place.png'),
+            image: AssetImage(
+                post.postImage ?? './assets/images/profile/avatar_place.png'),
             height: MediaQuery.of(context).size.height * 0.45,
             fit: BoxFit.cover,
           ),
@@ -117,7 +119,8 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                   color: theme.colorScheme.onBackground.withAlpha(200),
                 ),
                 onTap: () {
-                  widget.postController.updateLikes(widget.postID, EngagementType.like);
+                  widget.postController
+                      .updateLikes(widget.postID, EngagementType.like);
                   Navigator.pop(context);
                 },
               ),
@@ -154,8 +157,8 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
               (post.comments == null)
                   ? ""
                   : (viewAllComments)
-                  ? "- ${post.comments!.getRange(0, post.comments!.length).join('\n- ')}"
-                  : "- ${post.comments!.getRange(0, min(4, post.comments!.length)).join('\n- ')}",
+                      ? "- ${post.comments!.getRange(0, post.comments!.length).join('\n- ')}"
+                      : "- ${post.comments!.getRange(0, min(4, post.comments!.length)).join('\n- ')}",
               color: theme.colorScheme.onBackground),
         ),
         Container(
@@ -180,49 +183,42 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
           child: Row(
             children: [
               Expanded(
-                child: TextFormField(
-                  style: FxTextStyle.b2(
-                      color: theme.colorScheme.onBackground,
-                      fontWeight: 500,
-                      fontSize: 12),
-                  decoration: InputDecoration(
-                      fillColor: customTheme.card,
-                      hintStyle: FxTextStyle.caption(
-                          color: theme.colorScheme.onBackground,
-                          fontWeight: 500,
-                          muted: true,
-                          letterSpacing: 0,
-                          fontSize: 12),
-                      filled: true,
-                      hintText: "Comment me",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Form(
+                  key: widget.postController.formKey,
+                  child: Column(
+                    children: [
+                      TextFormFieldStyled(
+                        hintText: "Add comment",
+                        controller: commentTE,
+                        validator: widget.postController.validateComment,
+                        icon: Icons.comment,
+                        keyboardType: TextInputType.multiline,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      FxSpacing.height(20),
+                      FxButton.block(
+                        borderRadiusAll: 8,
+                        onPressed: () async {
+                          await widget.postController.addComment(
+                            context,
+                            commentTE.text,
+                            widget.postID,
+                          );
+                          Navigator.pop(context);
+                        },
+                        backgroundColor: customTheme.estatePrimary,
+                        child: FxText.l1(
+                          "Add",
+                          color: customTheme.cookifyOnPrimary,
+                        ),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      isDense: true,
-                      contentPadding: FxSpacing.all(12)),
-                  textCapitalization: TextCapitalization.sentences,
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                margin: FxSpacing.left(16),
-                child: FxText.caption("Post",
-                    color: theme.colorScheme.primary.withAlpha(200),
-                    fontWeight: 500),
-              )
             ],
           ),
         ),
       ],
     );
-
   }
 }
