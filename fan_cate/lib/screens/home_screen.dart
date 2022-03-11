@@ -135,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Widget> postsList = [];
 
     for (String postID in postController.posts!.keys) {
-      // Post post = postController.posts![postID]!;
       postsList.add(singlePost(postID: postID));
     }
 

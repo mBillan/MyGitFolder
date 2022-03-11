@@ -14,7 +14,7 @@ class RegisterController extends FxController {
   late TextEditingController emailTE = TextEditingController();
   late TextEditingController passwordTE = TextEditingController();
 
-  UserController userController = FxControllerStore.putOrFind(UserController());
+  UserController userController = FxControllerStore.put(UserController());
   CollectionReference? usersCollection;
 
   GlobalKey<FormState> formKey = GlobalKey();
@@ -91,6 +91,9 @@ class RegisterController extends FxController {
           await result.user!.updateDisplayName(username);
 
           await addUserToFirebase(result.user!, username);
+
+          // Make sure the user isn't logged in automatically
+          await userController.auth.signOut();
 
           showSnackBar("Registration is done!");
           Navigator.of(context).pop();

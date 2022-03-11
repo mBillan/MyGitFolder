@@ -121,9 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FxSpacing.height(16),
                   FxButton.block(
                     borderRadiusAll: 8,
-                    onPressed: () {
-                      registerController.register();
-                    },
+                    onPressed: registerController.register,
                     backgroundColor: customTheme.estatePrimary,
                     child: FxText.l1(
                       "Create an Account",
