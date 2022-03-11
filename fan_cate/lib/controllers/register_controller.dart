@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/user_controller.dart';
 import 'package:fan_cate/screens/forgot_password_screen.dart';
 import 'package:fan_cate/screens/home_screen.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/src/auth.dart';
+import 'package:fan_cate/src/styledDateTime.dart';
 
 class RegisterController extends FxController {
   late TextEditingController usernameTE = TextEditingController();
@@ -13,7 +15,7 @@ class RegisterController extends FxController {
   late TextEditingController passwordTE = TextEditingController();
 
   UserController userController = FxControllerStore.putOrFind(UserController());
-
+  CollectionReference? usersCollection;
 
   GlobalKey<FormState> formKey = GlobalKey();
 
@@ -25,6 +27,7 @@ class RegisterController extends FxController {
     usernameTE = TextEditingController(text: '');
     emailTE = TextEditingController(text: '');
     passwordTE = TextEditingController(text: '');
+    usersCollection = FirebaseFirestore.instance.collection('users');
   }
 
   @override
@@ -77,11 +80,18 @@ class RegisterController extends FxController {
       String password = passwordTE.text;
 
       try {
-        UserCredential result = await userController.auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        UserCredential result =
+            await userController.auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
         if (result.user != null) {
+          // Update the name in the DB (the result object is not affected)
           await result.user!.updateDisplayName(username);
+
+          await addUserToFirebase(result.user!, username);
+
           showSnackBar("Registration is done!");
           Navigator.of(context).pop();
         } else {
@@ -110,6 +120,17 @@ class RegisterController extends FxController {
     }
     loading = false;
     update();
+  }
+
+  Future<void> addUserToFirebase(User user, String username) async {
+    // Add the user record to the Firebase Database 'Users' collection
+    await usersCollection?.add({
+      'uid': user.uid,
+      'name': username,
+      'email': user.email,
+      'profileURL': user.photoURL,
+      'timeAdded': currTimeStyled(),
+    });
   }
 
   void goToHomeScreen() {
