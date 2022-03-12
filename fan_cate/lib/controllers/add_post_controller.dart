@@ -30,8 +30,7 @@ class AddPostController extends FxController {
     if (FxStringValidator.isSpecialCharacterIncluded(status)) {
       return "Please don't use special characters";
     }
-    if (!FxStringValidator.validateStringRange(
-        status, minLength, maxLength)) {
+    if (!FxStringValidator.validateStringRange(status, minLength, maxLength)) {
       return "Username length must between $minLength and $maxLength";
     }
     return null;
@@ -41,7 +40,7 @@ class AddPostController extends FxController {
     uiLoading = true;
     update();
 
-    if(formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       Post post = Post(
         profileImage: userController.user?.photoURL ??
             './assets/images/profile/avatar_place.png',
@@ -70,6 +69,7 @@ class AddPostController extends FxController {
           'time': post.time,
           'postImage': post.postImage,
           'likes': post.likes,
+          'likeUids': post.likeUids,
           'comments': post.comments
         })
         .then((value) => showSnackBar(context, 'Post added'))

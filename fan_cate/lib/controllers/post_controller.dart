@@ -44,7 +44,9 @@ class PostController extends FxController {
         likes: data["likes"],
         // TODO: write the time in a readable format
         time: data["time"],
-        comments: data["comments"], // The comments are of type: List<dynamic>?
+        comments: data["comments"],
+        // The comments are of type: List<dynamic>?
+        likeUids: data["likeUids"], // The likeUids are of type: List<dynamic>?
       );
       updatedPostsList[docs[idx].id] = currPost;
     }
@@ -59,22 +61,34 @@ class PostController extends FxController {
     uiLoading = true;
 
     int newLikes = posts![postID]!.likes;
+    List<dynamic>? newLikeUids = posts![postID]!.likeUids;
 
     switch (engage) {
       case EngagementType.like:
         newLikes += 1;
+        newLikeUids?.add(userController.user!.uid);
         break;
-      case EngagementType.dislike:
+
+      case EngagementType.unlike:
         newLikes -= 1;
+        newLikeUids?.remove(userController.user!.uid);
         break;
       default:
         break;
     }
 
-    postsCollection!.doc(postID).update({"likes": newLikes});
+    postsCollection!.doc(postID).update({
+      "likes": newLikes,
+      "likeUids": newLikeUids,
+    });
 
     showLoading = false;
     uiLoading = false;
+  }
+
+  bool didUserLikedPost(String postID) {
+    return posts![postID]!.likeUids?.contains(userController.user!.uid) ??
+        false;
   }
 
   @override

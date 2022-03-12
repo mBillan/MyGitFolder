@@ -244,12 +244,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   InkWell(
                     child: Icon(
-                      MdiIcons.heartOutline,
+                      (postController.didUserLikedPost(postID))
+                          ? MdiIcons.heart
+                          : MdiIcons.heartOutline,
                       size: 20,
-                      color: theme.colorScheme.onBackground.withAlpha(200),
+                      color: (postController.didUserLikedPost(postID))
+                          ? Colors.redAccent
+                          : theme.colorScheme.onBackground.withAlpha(200),
                     ),
                     onTap: () {
-                      postController.updateLikes(postID, EngagementType.like);
+                      EngagementType engagementType =
+                          (postController.didUserLikedPost(postID))
+                              ? EngagementType.unlike
+                              : EngagementType.like;
+                      postController.updateLikes(postID, engagementType);
                     },
                   ),
                   FxText.caption(post.likes.toString(),

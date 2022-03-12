@@ -48,11 +48,8 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
           return Scaffold(
             body: StreamBuilder<QuerySnapshot>(
               stream: postController.postsStream,
-              // initialData: ,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                print("Snapshot state: ${snapshot.connectionState}");
-
                 if (snapshot.hasError) {
                   return const Text(
                       'Something went wrong while loading data from the DB');
@@ -68,7 +65,6 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                   );
                 }
 
-                // print("spanshot data is ${snapshot.data}");
                 postController.reloadPosts(snapshot.data!.docs);
                 post = postController.posts![widget.postID]!;
 
@@ -150,13 +146,20 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
             children: [
               InkWell(
                 child: Icon(
-                  MdiIcons.heartOutline,
+                  (postController.didUserLikedPost(widget.postID))
+                      ? MdiIcons.heart
+                      : MdiIcons.heartOutline,
                   size: 20,
-                  color: theme.colorScheme.onBackground.withAlpha(200),
+                  color: (postController.didUserLikedPost(widget.postID))
+                      ? Colors.redAccent
+                      : theme.colorScheme.onBackground.withAlpha(200),
                 ),
                 onTap: () {
-                  postController.updateLikes(
-                      widget.postID, EngagementType.like);
+                  EngagementType engagementType =
+                      (postController.didUserLikedPost(widget.postID))
+                          ? EngagementType.unlike
+                          : EngagementType.like;
+                  postController.updateLikes(widget.postID, engagementType);
                 },
               ),
               FxText.caption(post.likes.toString(),

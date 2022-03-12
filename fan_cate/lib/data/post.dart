@@ -1,8 +1,8 @@
-
 class Post {
   final String profileImage, name, status, time;
   final String? postImage;
   final List<dynamic>? comments;
+  final List<dynamic>? likeUids;
   final int likes;
 
   Post(
@@ -12,7 +12,8 @@ class Post {
       this.postImage,
       required this.time,
       this.likes = 0,
-      this.comments = const []});
+      this.comments = const [],
+      this.likeUids = const []});
 
   static List<Post> postsList() {
     List<Post> list = [];
