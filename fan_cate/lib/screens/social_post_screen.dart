@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/src/engagement.dart';
 import 'package:fan_cate/theme/app_theme.dart';
@@ -9,13 +9,11 @@ import 'package:fan_cate/flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../data/post.dart';
+import '../loading_effect.dart';
 
 class SocialPostScreen extends StatefulWidget {
-  const SocialPostScreen(
-      {Key? key, required this.postID, required this.postController})
-      : super(key: key);
+  const SocialPostScreen({Key? key, required this.postID}) : super(key: key);
   final String postID;
-  final PostController postController;
 
   @override
   _SocialPostScreenState createState() => _SocialPostScreenState();
@@ -27,6 +25,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
   late bool viewAllComments;
   late Post post;
   late TextEditingController commentTE;
+  late PostController postController;
 
   @override
   void initState() {
@@ -34,15 +33,52 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
     viewAllComments = false;
-    post = widget.postController.posts![widget.postID]!;
+
+    // Init a new post controller for the single post screen
+    // Note: when the single post is updated, both controllers (in the single post screen and the home screen) call reloadPosts
+    postController = FxControllerStore.put(PostController());
     commentTE = TextEditingController(text: '');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
+    return FxBuilder<PostController>(
+        controller: postController,
+        builder: (context) {
+          return Scaffold(
+            body: StreamBuilder<QuerySnapshot>(
+              stream: postController.postsStream,
+              // initialData: ,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                print("Snapshot state: ${snapshot.connectionState}");
+
+                if (snapshot.hasError) {
+                  return const Text(
+                      'Something went wrong while loading data from the DB');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    postController.uiLoading) {
+                  return Container(
+                    margin: FxSpacing.top(16),
+                    child: LoadingEffect.getFavouriteLoadingScreen(
+                      context,
+                    ),
+                  );
+                }
+
+                // print("spanshot data is ${snapshot.data}");
+                postController.reloadPosts(snapshot.data!.docs);
+                post = postController.posts![widget.postID]!;
+
+                return _buildBody();
+              },
+            ),
+
+            // _buildBody(),
+          );
+        });
   }
 
   Widget _buildBody() {
@@ -119,9 +155,8 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                   color: theme.colorScheme.onBackground.withAlpha(200),
                 ),
                 onTap: () {
-                  widget.postController
-                      .updateLikes(widget.postID, EngagementType.like);
-                  Navigator.pop(context);
+                  postController.updateLikes(
+                      widget.postID, EngagementType.like);
                 },
               ),
               FxText.caption(post.likes.toString(),
@@ -184,13 +219,13 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
             children: [
               Expanded(
                 child: Form(
-                  key: widget.postController.formKey,
+                  key: postController.formKey,
                   child: Column(
                     children: [
                       TextFormFieldStyled(
                         hintText: "Add comment",
                         controller: commentTE,
-                        validator: widget.postController.validateComment,
+                        validator: postController.validateComment,
                         icon: Icons.comment,
                         keyboardType: TextInputType.multiline,
                       ),
@@ -198,12 +233,11 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                       FxButton.block(
                         borderRadiusAll: 8,
                         onPressed: () async {
-                          await widget.postController.addComment(
+                          await postController.addComment(
                             context,
                             commentTE.text,
                             widget.postID,
                           );
-                          Navigator.pop(context);
                         },
                         backgroundColor: customTheme.estatePrimary,
                         child: FxText.l1(

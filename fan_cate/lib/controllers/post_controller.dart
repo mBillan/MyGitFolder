@@ -24,14 +24,12 @@ class PostController extends FxController {
 
     showLoading = false;
     uiLoading = false;
-    update();
   }
 
   void reloadPosts(List<QueryDocumentSnapshot<Object?>> docs) {
     showLoading = true;
     uiLoading = true;
 
-    print("Updating the posts");
     Map<String, Post> updatedPostsList = {};
     for (int idx = 0; idx < docs.length; idx++) {
       Map<String, dynamic> data = docs[idx].data()! as Map<String, dynamic>;
@@ -56,7 +54,10 @@ class PostController extends FxController {
     uiLoading = false;
   }
 
-  Future<void> updateLikes(String postID, EngagementType engage) async {
+  void updateLikes(String postID, EngagementType engage) {
+    showLoading = true;
+    uiLoading = true;
+
     int newLikes = posts![postID]!.likes;
 
     switch (engage) {
@@ -70,7 +71,10 @@ class PostController extends FxController {
         break;
     }
 
-    await postsCollection!.doc(postID).update({"likes": newLikes});
+    postsCollection!.doc(postID).update({"likes": newLikes});
+
+    showLoading = false;
+    uiLoading = false;
   }
 
   @override

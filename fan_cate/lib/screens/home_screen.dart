@@ -92,8 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Something went wrong while loading data from the DB');
                       }
 
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          postController.uiLoading) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container(
                           margin: FxSpacing.top(16),
                           child: LoadingEffect.getFavouriteLoadingScreen(
@@ -150,7 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(
             builder: (context) => SocialPostScreen(
               postID: postID,
-              postController: postController,
             ),
           ),
         );
@@ -244,14 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     leftFraction: 0.72,
                     size: 24,
                   ),
-
                   InkWell(
                     child: Icon(
                       MdiIcons.heartOutline,
                       size: 20,
                       color: theme.colorScheme.onBackground.withAlpha(200),
                     ),
-                    onTap: () async {
+                    onTap: () {
                       postController.updateLikes(postID, EngagementType.like);
                     },
                   ),
