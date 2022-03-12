@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/user_controller.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:fan_cate/data/post.dart';
-import 'package:fan_cate/src/styledDateTime.dart';
 import 'package:flutter/material.dart';
 import '../src/engagement.dart';
+import 'comment_controller.dart';
 
 class PostController extends FxController {
   bool showLoading = true, uiLoading = true;
@@ -13,6 +13,8 @@ class PostController extends FxController {
   CollectionReference? postsCollection;
   GlobalKey<FormState> formKey = GlobalKey();
   UserController userController = FxControllerStore.putOrFind(UserController());
+  CommentController commentController =
+      FxControllerStore.putOrFind(CommentController());
 
   @override
   initState() {
@@ -114,32 +116,19 @@ class PostController extends FxController {
       BuildContext context, String comment, String postID) async {
     if (formKey.currentState!.validate()) {
       // TODO: Add the comment to the post list of comments
-      await addCommentToPost(comment, postID);
-      await addCommentToFirebase(context, comment, postID);
+      String newCommentID = await commentController.addCommentToFirebase(
+          context, comment, postID);
+      await addCommentToPost(newCommentID, comment, postID);
+      commentController.getCommentByID(newCommentID);
     }
   }
 
-  Future<void> addCommentToFirebase(
-      BuildContext context, String comment, String postID) async {
-    CollectionReference comments =
-        FirebaseFirestore.instance.collection('comments');
-
-    // Call the posts CollectionReference to add a new comment
-    return comments
-        .add({
-          'uid': userController.user?.uid,
-          'postID': postID,
-          'time': currTimeStyled(),
-          'text': comment,
-        })
-        .then((value) => showSnackBar(context, 'Comment added'))
-        .catchError(
-            (error) => showSnackBar(context, "Failed to add comment: $error"));
-  }
-
-  Future<void> addCommentToPost(String comment, String postID) async {
+  Future<void> addCommentToPost(
+      String commentID, String comment, String postID) async {
+    // TODO: Update the Comments field of the Posts to be a map
     List<dynamic>? currComments = posts![postID]!.comments;
-    currComments?.add(comment);
+    currComments?.add(commentID);
+    // currComments?.add(comment);
 
     await postsCollection!.doc(postID).update({"comments": currComments});
   }
