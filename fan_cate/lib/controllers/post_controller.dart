@@ -127,8 +127,8 @@ class PostController extends FxController {
       String commentID, String comment, String postID) async {
     // TODO: Update the Comments field of the Posts to be a map
     List<dynamic>? currComments = posts![postID]!.comments;
-    currComments?.add(commentID);
-    // currComments?.add(comment);
+    // currComments?.add(commentID);
+    currComments?.add(comment);
 
     await postsCollection!.doc(postID).update({"comments": currComments});
   }

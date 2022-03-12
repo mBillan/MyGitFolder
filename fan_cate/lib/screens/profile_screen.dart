@@ -30,8 +30,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     userController = FxControllerStore.put(UserController());
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
-    print('init profile screen, key:${userController.formKey.toString()}');
-
   }
 
   @override
@@ -41,7 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("context of profile is ${context.toString()}, key:${widget.key.toString()}");
     return FxBuilder<UserController>(
       key: widget.key ?? GlobalKey(debugLabel: "ProfileScreen Widget key"),
         controller: userController,

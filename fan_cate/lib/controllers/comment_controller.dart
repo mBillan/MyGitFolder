@@ -74,7 +74,6 @@ class CommentController extends FxController {
     commentID = '0kF92eLuEebe8aVf3deO';
     DocumentSnapshot<dynamic>? res =
         await commentsCollection?.doc('0kF92eLuEebe8aVf3deO').get();
-    print("Ahaa ${res?.id}, ${res?.data()["postID"]}");
 
     Comment comment = Comment(text: '', uid: '', time: '', postID: '');
     return comment;

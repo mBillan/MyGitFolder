@@ -56,7 +56,6 @@ class _SimpleCardWidgetState extends State<SimpleCardWidget> {
                     onChanged: (value) {
                       setState(
                         () {
-                          print(value);
                           _elevation = value;
                         },
                       );
