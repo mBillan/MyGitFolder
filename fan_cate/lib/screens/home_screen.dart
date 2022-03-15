@@ -6,6 +6,7 @@ import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
 import 'package:fan_cate/screens/social_post_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/custom/post_comments.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -303,97 +304,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            buildPostComments(postID: postID),
+            PostCommentsSection(postID: postID),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildPostComments({required String postID}) {
-    // convert comments to be commentsID
-    List<Widget> commentsWidgets = [];
-
-    return FxBuilder<CommentController>(
-        controller: FxControllerStore.put(CommentController(postID)),
-        builder: (commentController) {
-          return StreamBuilder<QuerySnapshot>(
-            stream: commentController.commentsStream,
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return const Text(
-                  'Something went wrong while loading data from the DB',
-                );
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  margin: FxSpacing.top(16),
-                  child: LoadingEffect.getFavouriteLoadingScreen(
-                    context,
-                  ),
-                );
-              }
-
-              commentController.reloadComments(snapshot.data!.docs);
-              // limit to only 3 comments
-              Iterable<String> commentIDs = commentController.comments?.keys
-                      .toList()
-                      .getRange(
-                          0, min(3, commentController.comments?.length ?? 0)) ??
-                  [];
-
-              // Convert each comment into a widget
-              for (String commentID in commentIDs) {
-                commentsWidgets.add(singleComment(
-                    comment: commentController.comments?[commentID]));
-              }
-
-              return Container(
-                alignment: AlignmentDirectional.topStart,
-                margin: FxSpacing.fromLTRB(16, 0, 16, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: commentsWidgets +
-                      [
-                        FxSpacing.height(10),
-                        FxText.caption(
-                          "View all ${commentController.comments?.length ?? 0} comments",
-                          color: theme.colorScheme.onBackground,
-                          xMuted: true,
-                        )
-                      ],
-                ),
-              );
-            },
-          );
-        });
-  }
-
-  Widget singleComment({required Comment? comment}) {
-    if (comment == null) {
-      return Container();
-    }
-
-    return Container(
-      margin: FxSpacing.top(4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // TODO: Add the name of the commenter
-          // FxText.b2(username,
-          //     color: theme.colorScheme.onBackground, fontWeight: 700),
-          Expanded(
-            child: Container(
-              child: FxText.caption(
-                "- ${comment.text}",
-                color: theme.colorScheme.onBackground,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          )
-        ],
       ),
     );
   }
