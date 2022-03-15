@@ -14,10 +14,10 @@ import 'package:flutter/material.dart';
 class PostCommentsSection extends StatefulWidget {
   final String postID;
 
-  const PostCommentsSection({Key? key,
+  const PostCommentsSection({
+    Key? key,
     required this.postID,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   _PostCommentsSectionState createState() => _PostCommentsSectionState();
@@ -25,20 +25,21 @@ class PostCommentsSection extends StatefulWidget {
 
 class _PostCommentsSectionState extends State<PostCommentsSection> {
   late ThemeData theme;
+  late bool viewAllComments;
 
   @override
   void initState() {
     super.initState();
     theme = AppTheme.theme;
-
+    viewAllComments = false;
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return buildPostCommentss(postID: widget.postID);
+    return buildPostComments(postID: widget.postID);
   }
 
-  Widget buildPostCommentss({required String postID}) {
+  Widget buildPostComments({required String postID}) {
     // convert comments to be commentsID
     List<Widget> commentsWidgets = [];
 
@@ -65,11 +66,14 @@ class _PostCommentsSectionState extends State<PostCommentsSection> {
               }
 
               commentController.reloadComments(snapshot.data!.docs);
-              // limit to only 3 comments
+              // Show maximum 5 comments if viewAllComments is off. Otherwise show all comments
+              int maxComments = (viewAllComments)
+                  ? commentController.comments?.length ?? 0
+                  : min(3, commentController.comments?.length ?? 0);
+
               Iterable<String> commentIDs = commentController.comments?.keys
-                  .toList()
-                  .getRange(
-                  0, min(3, commentController.comments?.length ?? 0)) ??
+                      .toList()
+                      .getRange(0, maxComments) ??
                   [];
 
               // Convert each comment into a widget
@@ -86,12 +90,21 @@ class _PostCommentsSectionState extends State<PostCommentsSection> {
                   children: commentsWidgets +
                       [
                         FxSpacing.height(10),
-                        FxText.caption(
-                          "View all ${commentController.comments?.length ??
-                              0} comments",
-                          color: theme.colorScheme.onBackground,
-                          xMuted: true,
-                        )
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              viewAllComments = !viewAllComments;
+                            });
+                          },
+                          child: FxText.caption(
+                            (viewAllComments)
+                                ? "Collapse comments"
+                                : "View all ${commentController.comments?.length} comments",
+                            color: theme.colorScheme.onBackground,
+                            xMuted: true,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
                       ],
                 ),
               );
@@ -126,6 +139,4 @@ class _PostCommentsSectionState extends State<PostCommentsSection> {
       ),
     );
   }
-
 }
-
