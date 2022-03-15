@@ -124,8 +124,8 @@ class _PostCommentsSectionState extends State<PostCommentsSection> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // TODO: Add the name of the commenter
-          // FxText.b2(username,
-          //     color: theme.colorScheme.onBackground, fontWeight: 700),
+          FxText.b2(comment.uid.characters.first + comment.uid.characters.last,
+              color: theme.colorScheme.onBackground, fontWeight: 700),
           Expanded(
             child: Container(
               child: FxText.caption(
@@ -134,7 +134,12 @@ class _PostCommentsSectionState extends State<PostCommentsSection> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          )
+          ),
+          FxText.caption(
+            comment.time,
+            color: theme.colorScheme.onBackground,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );
