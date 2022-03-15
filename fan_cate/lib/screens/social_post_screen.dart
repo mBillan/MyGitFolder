@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/src/engagement.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/custom/post_comments.dart';
 import 'package:fan_cate/widgets/text_form_field/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -188,34 +189,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
             ],
           ),
         ),
-        // Only show the first 5 comments and hide the others if viewAllComments is false
-        Container(
-          margin: FxSpacing.fromLTRB(24, 12, 24, 0),
-          child: FxText.caption(
-              (post.comments == null)
-                  ? ""
-                  : (viewAllComments)
-                      ? "- ${post.comments!.getRange(0, post.comments!.length).join('\n- ')}"
-                      : "- ${post.comments!.getRange(0, min(4, post.comments!.length)).join('\n- ')}",
-              color: theme.colorScheme.onBackground),
-        ),
-        Container(
-          margin: FxSpacing.fromLTRB(24, 8, 24, 0),
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                viewAllComments = !viewAllComments;
-              });
-            },
-            child: FxText.caption(
-                (viewAllComments)
-                    ? "Collapse comments"
-                    : "View all ${post.comments?.length} comments",
-                color: theme.colorScheme.onBackground,
-                xMuted: true,
-                letterSpacing: -0.2),
-          ),
-        ),
+        PostCommentsSection(postID: widget.postID),
         Container(
           margin: FxSpacing.fromLTRB(24, 16, 24, 0),
           child: Row(
