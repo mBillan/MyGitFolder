@@ -13,8 +13,9 @@ class PostController extends FxController {
   CollectionReference? postsCollection;
   GlobalKey<FormState> formKey = GlobalKey();
   UserController userController = FxControllerStore.putOrFind(UserController());
-  CommentController commentController =
-      FxControllerStore.putOrFind(CommentController());
+
+  // A dummy commentController with empty comments for internal use only
+  final CommentController _commentController = FxControllerStore.put(CommentController(''));
 
   @override
   initState() {
@@ -50,6 +51,7 @@ class PostController extends FxController {
         // The comments are of type: List<dynamic>?
         likeUids: data["likeUids"], // The likeUids are of type: List<dynamic>?
       );
+
       updatedPostsList[docs[idx].id] = currPost;
     }
 
@@ -116,10 +118,9 @@ class PostController extends FxController {
       BuildContext context, String comment, String postID) async {
     if (formKey.currentState!.validate()) {
       // TODO: Add the comment to the post list of comments
-      String newCommentID = await commentController.addCommentToFirebase(
+      String newCommentID = await _commentController.addCommentToFirebase(
           context, comment, postID);
       await addCommentToPost(newCommentID, comment, postID);
-      commentController.getCommentByID(newCommentID);
     }
   }
 

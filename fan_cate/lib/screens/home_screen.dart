@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fan_cate/controllers/comment_controller.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../data/comment.dart';
 import '../data/post.dart';
 import '../src/engagement.dart';
 import '../utils/generator.dart';
@@ -301,40 +303,79 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            buildComments(comments: post.comments),
+            buildPostComments(postID: postID),
           ],
         ),
       ),
     );
   }
 
-  Widget buildComments({required List<dynamic>? comments}) {
+  Widget buildPostComments({required String postID}) {
+    // convert comments to be commentsID
     List<Widget> commentsWidgets = [];
 
-    // Take only the first 3 comments
-    for (String comment in comments!.getRange(0, min(3, comments.length))) {
-      commentsWidgets.add(singleComment(comment: comment));
-    }
+    return FxBuilder<CommentController>(
+        controller: FxControllerStore.put(CommentController(postID)),
+        builder: (commentController) {
+          return StreamBuilder<QuerySnapshot>(
+            stream: commentController.commentsStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text(
+                  'Something went wrong while loading data from the DB',
+                );
+              }
 
-    return Container(
-      alignment: AlignmentDirectional.topStart,
-      margin: FxSpacing.fromLTRB(16, 0, 16, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: commentsWidgets +
-            [
-              FxSpacing.height(10),
-              FxText.caption(
-                "Press for more comments",
-                color: theme.colorScheme.onBackground,
-                xMuted: true,
-              )
-            ],
-      ),
-    );
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  margin: FxSpacing.top(16),
+                  child: LoadingEffect.getFavouriteLoadingScreen(
+                    context,
+                  ),
+                );
+              }
+
+              commentController.reloadComments(snapshot.data!.docs);
+              // limit to only 3 comments
+              Iterable<String> commentIDs = commentController.comments?.keys
+                      .toList()
+                      .getRange(
+                          0, min(3, commentController.comments?.length ?? 0)) ??
+                  [];
+
+              // Convert each comment into a widget
+              for (String commentID in commentIDs) {
+                commentsWidgets.add(singleComment(
+                    comment: commentController.comments?[commentID]));
+              }
+
+              return Container(
+                alignment: AlignmentDirectional.topStart,
+                margin: FxSpacing.fromLTRB(16, 0, 16, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: commentsWidgets +
+                      [
+                        FxSpacing.height(10),
+                        FxText.caption(
+                          "View all ${commentController.comments?.length ?? 0} comments",
+                          color: theme.colorScheme.onBackground,
+                          xMuted: true,
+                        )
+                      ],
+                ),
+              );
+            },
+          );
+        });
   }
 
-  Widget singleComment({required String comment, String username = "Mar B"}) {
+  Widget singleComment({required Comment? comment}) {
+    if (comment == null) {
+      return Container();
+    }
+
     return Container(
       margin: FxSpacing.top(4),
       child: Row(
@@ -346,8 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Container(
               child: FxText.caption(
-                // Generator.getDummyText(5, withEmoji: true),
-                "- $comment",
+                "- ${comment.text}",
                 color: theme.colorScheme.onBackground,
                 overflow: TextOverflow.ellipsis,
               ),

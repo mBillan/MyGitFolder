@@ -6,6 +6,9 @@ import 'package:fan_cate/src/styledDateTime.dart';
 import 'package:flutter/material.dart';
 
 class CommentController extends FxController {
+  CommentController(this.postID);
+  final String postID;
+
   bool showLoading = true, uiLoading = true;
   Map<String, Comment>? comments;
   Stream<QuerySnapshot>? commentsStream;
@@ -13,13 +16,14 @@ class CommentController extends FxController {
   GlobalKey<FormState> formKey = GlobalKey();
   UserController userController = FxControllerStore.putOrFind(UserController());
 
+
   @override
   initState() {
     super.save = false;
     super.initState();
 
     commentsCollection = FirebaseFirestore.instance.collection('comments');
-    commentsStream = commentsCollection?.snapshots();
+    commentsStream = commentsCollection?.where('postID', isEqualTo: postID)?.snapshots();
 
     showLoading = false;
     uiLoading = false;
@@ -60,24 +64,28 @@ class CommentController extends FxController {
     return docRef.id;
   }
 
-//   void reloadPosts(List<QueryDocumentSnapshot<Object?>> docs) {
-  List<dynamic> getCommentsByIDList(List<String> commentIDs) {
-    List<dynamic> comments = [];
-    for (String id in commentIDs) {
-      comments.add(getCommentByID(id));
+  void reloadComments(List<QueryDocumentSnapshot<Object?>> docs) {
+    showLoading = true;
+    uiLoading = true;
+
+    Map<String, Comment> updatedComments = {};
+    for (int idx = 0; idx < docs.length; idx++) {
+      Map<String, dynamic> data = docs[idx].data()! as Map<String, dynamic>;
+      Comment currComment = Comment(
+        text: data["text"],
+        postID: data["postID"],
+        uid: data["uid"],
+        time: data["time"],
+      );
+
+      updatedComments[docs[idx].id] = currComment;
     }
-    return comments;
+
+    comments = updatedComments;
+    showLoading = false;
+    uiLoading = false;
   }
 
-  Future<Comment> getCommentByID(String commentID) async {
-    // Get the comment from the DB and then
-    commentID = '0kF92eLuEebe8aVf3deO';
-    DocumentSnapshot<dynamic>? res =
-        await commentsCollection?.doc('0kF92eLuEebe8aVf3deO').get();
-
-    Comment comment = Comment(text: '', uid: '', time: '', postID: '');
-    return comment;
-  }
 
   void showSnackBar(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(
