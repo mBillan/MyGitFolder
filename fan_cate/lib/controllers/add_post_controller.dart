@@ -31,7 +31,7 @@ class AddPostController extends FxController {
       return "Please don't use special characters";
     }
     if (!FxStringValidator.validateStringRange(status, minLength, maxLength)) {
-      return "Username length must between $minLength and $maxLength";
+      return "Status length must between $minLength and $maxLength";
     }
     return null;
   }
