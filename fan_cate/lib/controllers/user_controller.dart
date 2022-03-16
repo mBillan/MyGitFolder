@@ -1,17 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/full_app.dart';
 import 'package:fan_cate/screens/login_screen.dart';
 import 'package:fan_cate/screens/register_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 
 class UserController extends FxController {
   bool loading = false;
-  FirebaseAuth auth = FirebaseAuth.instance;
-  User? user;
+  firebase_auth.FirebaseAuth auth = firebase_auth.FirebaseAuth.instance;
+  firebase_auth.User? user;
   GlobalKey<FormState> formKey = GlobalKey();
   late TextEditingController displayNameTE;
 
+  Map<String, User>? users;
+
+  CollectionReference? usersCollection;
 
   UserController() {
     save = false;
@@ -23,6 +28,8 @@ class UserController extends FxController {
     update();
 
     user = auth.currentUser;
+    usersCollection = FirebaseFirestore.instance.collection('users');
+
     displayNameTE = TextEditingController(text: auth.currentUser?.displayName);
 
     update();
@@ -37,6 +44,8 @@ class UserController extends FxController {
 
     if (formKey.currentState!.validate()) {
       await user?.updateDisplayName(displayNameTE.text);
+      updateUserNameInDB(displayNameTE.text);
+
       update();
       showSnackBar("Updated successfully");
       goToProfile();
@@ -44,6 +53,18 @@ class UserController extends FxController {
 
     loading = false;
     update();
+  }
+
+  void updateUserNameInDB(String newName) {
+    usersCollection!.where('uid', isEqualTo: user!.uid).snapshots().listen(
+      (QuerySnapshot snap) {
+        usersCollection!.doc(snap.docs[0].id).update(
+          {
+            "name": newName,
+          },
+        );
+      },
+    );
   }
 
   void goToProfile() {
@@ -104,5 +125,4 @@ class UserController extends FxController {
       ),
     );
   }
-
 }
