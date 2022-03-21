@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class CommentController extends FxController {
   CommentController(this.postID);
+
   final String postID;
 
   bool showLoading = true, uiLoading = true;
@@ -16,14 +17,16 @@ class CommentController extends FxController {
   GlobalKey<FormState> formKey = GlobalKey();
   UserController userController = FxControllerStore.putOrFind(UserController());
 
-
   @override
   initState() {
     super.save = false;
     super.initState();
 
     commentsCollection = FirebaseFirestore.instance.collection('comments');
-    commentsStream = commentsCollection?.where('postID', isEqualTo: postID)?.snapshots();
+    commentsStream = commentsCollection
+        ?.where('postID', isEqualTo: postID)
+        ?.orderBy('timestamp', descending: false)
+        .snapshots();
 
     showLoading = false;
     uiLoading = false;
@@ -59,6 +62,7 @@ class CommentController extends FxController {
       'postID': postID,
       'time': currTimeStyled(),
       'text': comment,
+      'timestamp': timeSinceEpoch()
     });
 
     return docRef.id;
@@ -85,7 +89,6 @@ class CommentController extends FxController {
     showLoading = false;
     uiLoading = false;
   }
-
 
   void showSnackBar(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(

@@ -67,6 +67,7 @@ class AddPostController extends FxController {
           'uid': userController.user?.uid,
           'status': post.status,
           'time': post.time,
+          'timestamp': timeSinceEpoch(),
           'postImage': post.postImage,
           'likes': post.likes,
           'likeUids': post.likeUids,

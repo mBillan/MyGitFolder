@@ -23,7 +23,7 @@ class PostController extends FxController {
     super.initState();
 
     postsCollection = FirebaseFirestore.instance.collection('posts');
-    postsStream = postsCollection?.snapshots();
+    postsStream = postsCollection?.orderBy('timestamp', descending: true).snapshots();
 
     showLoading = false;
     uiLoading = false;
