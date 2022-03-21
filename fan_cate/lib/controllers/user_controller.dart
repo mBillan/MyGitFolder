@@ -17,6 +17,7 @@ class UserController extends FxController {
   Map<String, User>? users;
 
   CollectionReference? usersCollection;
+  Stream<QuerySnapshot>? usersStream;
 
   UserController() {
     save = false;
@@ -29,6 +30,8 @@ class UserController extends FxController {
 
     user = auth.currentUser;
     usersCollection = FirebaseFirestore.instance.collection('users');
+    usersStream =
+        usersCollection?.where('uid', isEqualTo: user?.uid).snapshots();
 
     displayNameTE = TextEditingController(text: auth.currentUser?.displayName);
 

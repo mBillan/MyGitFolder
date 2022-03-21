@@ -1,8 +1,7 @@
-import 'package:fan_cate/controllers/user_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class User {
-  final String email, name, image;
+  final String email, name;
+  final String? image;
 
   User(this.email, this.name, this.image,);
 
