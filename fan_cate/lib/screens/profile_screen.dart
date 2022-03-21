@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/custom/image_clip.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
@@ -102,24 +103,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FxContainer(
           child: Row(
             children: [
-              ClipRRect(
+              ImageClipRectStyled(
+                image: user.image,
+                icon: Icons.person,
                 borderRadius: BorderRadius.circular(50),
-                child: (user.image == null || user.image == '')
-                    ? const Icon(
-                        Icons.person,
-                        size: 40,
-                      )
-                    : (user.image!.contains("http"))
-                        ? Image.network(
-                            user.image!,
-                            width: 100,
-                            height: 100,
-                          )
-                        : Image(
-                            image: AssetImage(controller.user?.photoURL ?? ''),
-                            height: 100,
-                            width: 100,
-                          ),
               ),
               FxSpacing.width(16),
               Expanded(
