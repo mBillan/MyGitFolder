@@ -6,6 +6,7 @@ import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
 import 'package:fan_cate/screens/social_post_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/custom/image_clip.dart';
 import 'package:fan_cate/widgets/custom/post_comments.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -176,14 +177,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       //     MaterialPageRoute(
                       //         builder: (context) => SocialProfileScreen(post)));
                     },
-                    child: Container(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          child: Image(
-                            image: AssetImage(post.profileImage),
-                            width: 32,
-                            height: 32,
-                          )),
+                    child: ImageClipRectStyled(
+                      image: post.profileImage,
+                      imageHeight: 40,
+                      imageWidth: 40,
+                      icon: Icons.person,
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   Container(
@@ -211,7 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               margin: FxSpacing.top(12),
-              child: Image(
+              child:
+              // TODO: Update this image to user the styled image
+              Image(
                 image: AssetImage(
                   post.postImage ?? './assets/images/profile/avatar_place.png',
                 ),

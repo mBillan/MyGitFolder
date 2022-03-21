@@ -3,9 +3,16 @@ import '../../theme/app_theme.dart';
 
 class ImageClipRectStyled extends StatefulWidget {
   const ImageClipRectStyled(
-      {Key? key, this.image, this.icon = Icons.image, this.borderRadius})
+      {Key? key,
+      this.image,
+      this.icon = Icons.image,
+      this.borderRadius,
+      this.imageHeight,
+      this.imageWidth})
       : super(key: key);
   final String? image;
+  final double? imageHeight;
+  final double? imageWidth;
   final IconData icon;
   final BorderRadius? borderRadius;
 
@@ -36,13 +43,13 @@ class _ImageClipRectStyledState extends State<ImageClipRectStyled> {
           : (widget.image!.contains("http"))
               ? Image.network(
                   widget.image!,
-                  width: 100,
-                  height: 100,
+                  height: widget.imageHeight,
+                  width: widget.imageWidth,
                 )
               : Image(
                   image: AssetImage(widget.image!),
-                  height: 100,
-                  width: 100,
+                  height: widget.imageHeight,
+                  width: widget.imageWidth,
                 ),
     );
   }
