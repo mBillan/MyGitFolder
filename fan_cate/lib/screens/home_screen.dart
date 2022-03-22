@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/comment_controller.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
@@ -6,7 +9,7 @@ import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
 import 'package:fan_cate/screens/social_post_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
-import 'package:fan_cate/widgets/custom/image_clip.dart';
+import 'package:fan_cate/widgets/material/images/image_clip.dart';
 import 'package:fan_cate/widgets/custom/post_comments.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -211,8 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               margin: FxSpacing.top(12),
               child:
-              // TODO: Update this image to user the styled image
-              Image(
+                  // TODO: Update this image to user the styled image
+                  Image(
                 image: AssetImage(
                   post.postImage ?? './assets/images/profile/avatar_place.png',
                 ),

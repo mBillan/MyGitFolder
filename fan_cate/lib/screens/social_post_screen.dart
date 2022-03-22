@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/src/engagement.dart';
 import 'package:fan_cate/theme/app_theme.dart';
-import 'package:fan_cate/widgets/custom/image_clip.dart';
+import 'package:fan_cate/widgets/material/images/image_clip.dart';
 import 'package:fan_cate/widgets/custom/post_comments.dart';
 import 'package:fan_cate/widgets/text_form_field/text_form_field.dart';
 import 'package:flutter/material.dart';

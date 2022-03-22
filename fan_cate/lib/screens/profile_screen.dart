@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
-import 'package:fan_cate/widgets/custom/image_clip.dart';
+import 'package:fan_cate/widgets/material/images/image_clip.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
@@ -107,6 +107,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 image: user.image,
                 icon: Icons.person,
                 borderRadius: BorderRadius.circular(50),
+                imageWidth: 80,
+                imageHeight: 80,
               ),
               FxSpacing.width(16),
               Expanded(
