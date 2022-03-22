@@ -1,6 +1,7 @@
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/widgets/material/images/image_clip.dart';
+import 'package:fan_cate/widgets/material/images/manipulate_images.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
@@ -23,11 +24,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
 
+  String? userImg;
+
   @override
   void initState() {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    userImg = widget.user.image;
   }
 
   @override
@@ -76,13 +80,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             child: Column(
               children: [
                 ImageClipRectStyled(
-                  image: widget.user.image,
+                  image: userImg,
                   icon: Icons.person,
                   borderRadius: BorderRadius.circular(100),
                   imageWidth: 150,
                   imageHeight: 150,
                   onTap: () {
                     print("Opening the image picker");
+                    selectImage(context);
                   },
                 ),
                 FxSpacing.height(24),
@@ -121,5 +126,58 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ],
       );
     }
+  }
+
+  void selectImage(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Photo Library'),
+                    onTap: () async {
+                      String pickedImage = await imgFromGallery();
+                      if (pickedImage != '') {
+                        setState(() {
+                          userImg = pickedImage;
+                        });
+                      }
+
+                      Navigator.of(context).pop();
+                      showSnackBar(
+                          "Image processing is not supported on the simulator");
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Photo Camera'),
+                  onTap: () async {
+                    String pickedImage = await imgFromCamera();
+                    if (pickedImage != '') {
+                      setState(() {
+                        userImg = pickedImage;
+                      });
+                    }
+
+                    Navigator.of(context).pop();
+                    showSnackBar(
+                        "Image processing is not supported on the simulator");
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void showSnackBar(String content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
   }
 }
