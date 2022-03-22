@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "48402113719",
+    "project_id": "bebandgroup",
+    "storage_bucket": "bebandgroup.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48402113719:android:e63f873a2397ab491b1932",
+        "android_client_info": {
+          "package_name": "com.example.bband"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48402113719-2t3ve1rt7cl7226s4k8uqbn81qt1pal2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWXvtcMVhgzaEhBnXTXykJs0W_01PlDiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48402113719-2t3ve1rt7cl7226s4k8uqbn81qt1pal2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48402113719:android:bc04cf4275b50a7e1b1932",
+        "android_client_info": {
+          "package_name": "com.example.beband"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48402113719-2t3ve1rt7cl7226s4k8uqbn81qt1pal2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWXvtcMVhgzaEhBnXTXykJs0W_01PlDiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48402113719-2t3ve1rt7cl7226s4k8uqbn81qt1pal2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
