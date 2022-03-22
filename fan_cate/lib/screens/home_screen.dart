@@ -108,6 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
 
+                      if (snapshot.data == null) {
+                        return FxText("No posts yet");
+                      }
+
                       postController.reloadPosts(snapshot.data!.docs);
 
                       return Expanded(

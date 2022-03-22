@@ -59,15 +59,18 @@ class UserController extends FxController {
   }
 
   void updateUserNameInDB(String newName) {
-    usersCollection!.where('uid', isEqualTo: user!.uid).snapshots().listen(
-      (QuerySnapshot snap) {
+    usersCollection!
+        .where('uid', isEqualTo: user!.uid)
+        .get()
+        .then((QuerySnapshot snap) {
+      if (snap.docs.isNotEmpty) {
         usersCollection!.doc(snap.docs[0].id).update(
           {
             "name": newName,
           },
         );
-      },
-    );
+      }
+    });
   }
 
   void goToProfile() {
