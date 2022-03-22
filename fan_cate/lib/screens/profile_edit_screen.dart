@@ -1,4 +1,6 @@
+import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/theme/app_theme.dart';
+import 'package:fan_cate/widgets/material/images/image_clip.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
@@ -7,8 +9,10 @@ import '../widgets/text_form_field/text_form_field.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final UserController userController;
+  final User user;
 
-  const ProfileEditScreen({Key? key, required this.userController})
+  const ProfileEditScreen(
+      {Key? key, required this.userController, required this.user})
       : super(key: key);
 
   @override
@@ -38,13 +42,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           colorScheme: theme.colorScheme
               .copyWith(secondary: customTheme.estatePrimary.withAlpha(40))),
       child: Scaffold(
-        body: _buildBody(widget.userController),
+        body: _buildBody(),
       ),
     );
   }
 
-  Widget _buildBody(UserController controller) {
-    if (controller.loading) {
+  Widget _buildBody() {
+    if (widget.userController.loading) {
       return Container(
           margin: FxSpacing.top(16),
           child: LoadingEffect.getSearchLoadingScreen(
@@ -68,17 +72,24 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ),
           FxSpacing.height(32),
           Form(
-            key: controller.formKey,
+            key: widget.userController.formKey,
             child: Column(
               children: [
-                FxText(
-                  controller.user?.displayName ?? '',
+                ImageClipRectStyled(
+                  image: widget.user.image,
+                  icon: Icons.person,
+                  borderRadius: BorderRadius.circular(100),
+                  imageWidth: 150,
+                  imageHeight: 150,
+                  onTap: () {
+                    print("Opening the image picker");
+                  },
                 ),
                 FxSpacing.height(24),
                 TextFormFieldStyled(
                   hintText: "Username",
-                  controller: controller.displayNameTE,
-                  validator: controller.validateDisplayName,
+                  controller: widget.userController.displayNameTE,
+                  validator: widget.userController.validateDisplayName,
                   icon: Icons.person_outline,
                   keyboardType: TextInputType.text,
                   maxLines: 1,
@@ -90,7 +101,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           FxSpacing.height(16),
           FxButton.block(
             borderRadiusAll: 8,
-            onPressed: controller.updateDisplayName,
+            onPressed: widget.userController.updateDisplayName,
             backgroundColor: customTheme.estatePrimary,
             child: FxText.l1(
               "Update",

@@ -1,9 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fan_cate/controllers/comment_controller.dart';
 import 'package:fan_cate/controllers/post_controller.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/loading_effect.dart';
@@ -15,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../data/comment.dart';
 import '../data/post.dart';
 import '../src/engagement.dart';
 import '../utils/generator.dart';

@@ -77,10 +77,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     }
-                    User user = User('N/A', 'N/A','');
-                    if(snapshot.data!.docs.length == 1) {
-                      Map<String, dynamic> data =
-                      snapshot.data!.docs[0].data()! as Map<String, dynamic>;
+                    User user = User('N/A', 'N/A', '');
+                    if (snapshot.data!.docs.length == 1) {
+                      Map<String, dynamic> data = snapshot.data!.docs[0].data()!
+                          as Map<String, dynamic>;
                       user = User(
                         data["email"],
                         data["name"],
@@ -110,9 +110,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(50),
                 imageWidth: 80,
                 imageHeight: 80,
-                onTap: () {
-                  print("Opening the image picker");
-                },
               ),
               FxSpacing.width(16),
               Expanded(
