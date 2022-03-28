@@ -147,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget singlePost({required String postID}) {
     Post post = postController.posts![postID]!;
-
     // TODO: find a way to get the username by uid (Note, tried to do that but got stuck with the async events)
     String publisherName = post.name;
 

@@ -58,17 +58,18 @@ class LoginController extends FxController {
       String password = passwordTE.text;
 
       try {
-        UserCredential result = await userController.auth.signInWithEmailAndPassword(
-            email: email, password: password);
+        UserCredential result = await userController.auth
+            .signInWithEmailAndPassword(email: email, password: password);
 
         if (result.user != null) {
+          userController.reloadCurrUser();
           showSnackBar("Login is done!");
           goToHomeScreen();
         } else {
           showSnackBar("Something wrong with the login");
         }
       } on FirebaseAuthException catch (error) {
-        switch (error.code){
+        switch (error.code) {
           case Auth.invalidEmail:
             showSnackBar("Invalid email address");
             break;

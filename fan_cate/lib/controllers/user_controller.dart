@@ -41,6 +41,11 @@ class UserController extends FxController {
     update();
   }
 
+  void reloadCurrUser() {
+    user = auth.currentUser;
+    update();
+  }
+
   Future<void> updateDisplayName() async {
     loading = true;
     update();
