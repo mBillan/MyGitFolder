@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "427677138041",
+    "project_id": "martech-examples",
+    "storage_bucket": "martech-examples.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427677138041:android:596062b18f2b5379c1a8a8",
+        "android_client_info": {
+          "package_name": "com.martech.fancate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427677138041-e7tnr8mausmvqkkdropp5if62km3v8q9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD48_-oohHzIbJIjgs7ja3__YT2Du2qQKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427677138041-e7tnr8mausmvqkkdropp5if62km3v8q9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "427677138041-tect2t7r0akuhj71ful4k66i5sfrhial.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.martech.fancate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
