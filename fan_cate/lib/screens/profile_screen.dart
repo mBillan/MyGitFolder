@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/profile_edit_screen.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/widgets/material/images/image_clip.dart';
+import 'package:fan_cate/widgets/material/images/manipulate_images.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
 import '../controllers/user_controller.dart';
@@ -77,14 +80,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     }
-                    User user = User('N/A', 'N/A', '');
+                    User user = User(name: 'N/A', email: 'N/A');
                     if (snapshot.data!.docs.length == 1) {
                       Map<String, dynamic> data = snapshot.data!.docs[0].data()!
                           as Map<String, dynamic>;
+
+                      // TODO: remove this W/A once all the users have the profileBytes field
+                      Uint8List? imageBytes;
+                      if (data.keys.contains('profileBytes')) {
+                        imageBytes =
+                            bytesToImage(base64string: data["profileBytes"]);
+                      }
+
                       user = User(
-                        data["email"],
-                        data["name"],
-                        data["profileURL"],
+                        name: data["name"],
+                        email: data["email"],
+                        image: data["profileURL"],
+                        imageBytes: imageBytes,
                       );
                     }
 
@@ -106,6 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               ImageClipRectStyled(
                 image: user.image,
+                imageBytes: user.imageBytes,
                 icon: Icons.person,
                 borderRadius: BorderRadius.circular(50),
                 imageWidth: 80,
