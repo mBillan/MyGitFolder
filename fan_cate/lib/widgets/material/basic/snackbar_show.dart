@@ -13,7 +13,6 @@ void showSimpleSnackBar(BuildContext context, String text) {
         style: theme.textTheme.subtitle2!
             .merge(TextStyle(color: theme.colorScheme.onPrimary)),
       ),
-      backgroundColor: theme.colorScheme.primary,
     ),
   );
 }
@@ -23,7 +22,6 @@ void showSnackBarWithAction(BuildContext context, String text) {
     SnackBar(
       content: FxText.sh2(text,
           color: theme.colorScheme.onPrimary),
-      backgroundColor: theme.colorScheme.primary,
       action: SnackBarAction(
         onPressed: () {},
         label: "Undo",
@@ -38,7 +36,6 @@ void showSnackBarWithFloating(BuildContext context, String text) {
     SnackBar(
       content: FxText.sh2(text,
           color: theme.colorScheme.onPrimary),
-      backgroundColor: theme.colorScheme.primary,
       behavior: SnackBarBehavior.floating,
     ),
   );
@@ -49,7 +46,6 @@ void showSnackBarWithFloatingAction(BuildContext context, String text) {
     SnackBar(
       content: FxText.sh2(text,
           color: theme.colorScheme.onPrimary),
-      backgroundColor: theme.colorScheme.primary,
       action: SnackBarAction(
         onPressed: () {},
         label: "Undo",
