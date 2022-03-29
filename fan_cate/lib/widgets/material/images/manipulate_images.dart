@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:device_info/device_info.dart';
 
-Future<String> imageToBytes({required String imgPath}) async {
+Future<Uint8List> imageToBytes({required String imgPath}) async {
   File imgFile = File(imgPath);
 
-  //convert to bytes
-  Uint8List imageBytes = await imgFile.readAsBytes();
+  // convert to bytes
+  return imgFile.readAsBytes();
+}
 
-  //convert bytes to base64 string
+Future<String> imageToBase64({required String imgPath}) async {
+  Uint8List imageBytes = await imageToBytes(imgPath: imgPath);
+
+  // convert bytes to base64 string
   return base64.encode(imageBytes);
 }
 
