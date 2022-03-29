@@ -139,7 +139,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     leading: const Icon(Icons.photo_library),
                     title: const Text('Photo Library'),
                     onTap: () async {
-                      String pickedImage = await imgFromGallery();
+                      String pickedImage = await imgFromGallery(context);
+                      print(pickedImage);
                       if (pickedImage != '') {
                         setState(() {
                           userImg = pickedImage;
@@ -147,14 +148,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       }
 
                       Navigator.of(context).pop();
-                      showSnackBar(
-                          "Image processing is not supported on the simulator");
                     }),
                 ListTile(
                   leading: const Icon(Icons.photo_camera),
                   title: const Text('Photo Camera'),
                   onTap: () async {
-                    String pickedImage = await imgFromCamera();
+                    String pickedImage = await imgFromCamera(context);
                     if (pickedImage != '') {
                       setState(() {
                         userImg = pickedImage;
@@ -162,8 +161,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     }
 
                     Navigator.of(context).pop();
-                    showSnackBar(
-                        "Image processing is not supported on the simulator");
                   },
                 ),
               ],

@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../theme/app_theme.dart';
+import 'package:fan_cate/theme/app_theme.dart';
 
 class ImageClipRectStyled extends StatefulWidget {
   const ImageClipRectStyled({
@@ -50,11 +51,19 @@ class _ImageClipRectStyledState extends State<ImageClipRectStyled> {
                     height: widget.imageHeight,
                     width: widget.imageWidth,
                   )
-                : Image(
-                    image: AssetImage(widget.image!),
-                    height: widget.imageHeight,
-                    width: widget.imageWidth,
-                  ),
+                : (widget.image!.startsWith('./'))
+                    ?
+                    // Reading an image from the assets directory
+                    Image(
+                        image: AssetImage(widget.image!),
+                        height: widget.imageHeight,
+                        width: widget.imageWidth,
+                      )
+                    : Image.file(
+                        File(widget.image!),
+                        height: widget.imageHeight,
+                        width: widget.imageWidth,
+                      ),
       ),
     );
   }
