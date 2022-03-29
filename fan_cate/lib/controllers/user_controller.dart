@@ -3,6 +3,7 @@ import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/screens/full_app.dart';
 import 'package:fan_cate/screens/login_screen.dart';
 import 'package:fan_cate/screens/register_screen.dart';
+import 'package:fan_cate/widgets/material/images/manipulate_images.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:fan_cate/flutx/flutx.dart';
@@ -72,6 +73,22 @@ class UserController extends FxController {
         usersCollection!.doc(snap.docs[0].id).update(
           {
             "name": newName,
+          },
+        );
+      }
+    });
+  }
+
+  Future<void> updateProfileImageInDB(String imgPath) async {
+    String imageBytes = await imageToBase64(imgPath: imgPath);
+    usersCollection!
+        .where('uid', isEqualTo: user!.uid)
+        .get()
+        .then((QuerySnapshot snap) {
+      if (snap.docs.isNotEmpty) {
+        usersCollection!.doc(snap.docs[0].id).update(
+          {
+            "profileBytes": imageBytes,
           },
         );
       }

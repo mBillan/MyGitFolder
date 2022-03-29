@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:fan_cate/data/user.dart';
 import 'package:fan_cate/theme/app_theme.dart';
 import 'package:fan_cate/widgets/material/images/image_clip.dart';
@@ -25,6 +26,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late ThemeData theme;
 
   String? userImg;
+  Uint8List? userImageBytes;
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
     userImg = widget.user.image;
+    userImageBytes = widget.user.imageBytes;
   }
 
   @override
@@ -81,6 +84,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               children: [
                 ImageClipRectStyled(
                   image: userImg,
+                  imageBytes: userImageBytes,
                   icon: Icons.person,
                   borderRadius: BorderRadius.circular(100),
                   imageWidth: 150,
@@ -106,7 +110,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           FxSpacing.height(16),
           FxButton.block(
             borderRadiusAll: 8,
-            onPressed: widget.userController.updateDisplayName,
+            onPressed: () {
+              widget.userController.updateDisplayName();
+              if (userImg != null) {
+                widget.userController.updateProfileImageInDB(userImg!);
+              }
+            },
             backgroundColor: customTheme.estatePrimary,
             child: FxText.l1(
               "Update",
@@ -140,10 +149,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     title: const Text('Photo Library'),
                     onTap: () async {
                       String pickedImage = await imgFromGallery(context);
-                      print(pickedImage);
                       if (pickedImage != '') {
-                        setState(() {
-                          userImg = pickedImage;
+                        imageToBytes(imgPath: pickedImage).then((bytes) {
+                          setState(() {
+                            userImg = pickedImage;
+                            userImageBytes = bytes;
+                          });
                         });
                       }
 
@@ -155,8 +166,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   onTap: () async {
                     String pickedImage = await imgFromCamera(context);
                     if (pickedImage != '') {
-                      setState(() {
-                        userImg = pickedImage;
+                      imageToBytes(imgPath: pickedImage).then((bytes) {
+                        setState(() {
+                          userImg = pickedImage;
+                          userImageBytes = bytes;
+                        });
                       });
                     }
 
